@@ -1,0 +1,120 @@
+@if (!embedded()) {
+  <div class="page-header">
+    <div>
+      <h1>Pruebas físicas</h1>
+      <p class="muted">Registra tus simulacros y sigue tu evolución hasta el día del examen.</p>
+    </div>
+  </div>
+}
+
+<app-test-cards [summaries]="summaries()" [selected]="selected()" (select)="selectTest($event)" />
+
+<div class="grid layout">
+  <section class="card">
+    <h2>Registrar marca</h2>
+    <form [formGroup]="form" (ngSubmit)="save()" class="stack" novalidate>
+      <div class="field">
+        <label for="t-type">Prueba</label>
+        <select id="t-type" class="input" formControlName="testType">
+          @for (d of defs; track d.type) {
+            <option [value]="d.type">{{ d.name }}</option>
+          }
+        </select>
+      </div>
+      <div class="form-grid" style="--min: 140px">
+        <div class="field">
+          <label for="t-date">Fecha</label>
+          <input
+            id="t-date"
+            class="input"
+            type="date"
+            formControlName="performedOn"
+            [max]="today"
+          />
+        </div>
+        <div class="field">
+          <label for="t-result">Marca</label>
+          <input
+            id="t-result"
+            class="input"
+            formControlName="result"
+            inputmode="decimal"
+            [placeholder]="formDef().placeholder"
+          />
+        </div>
+      </div>
+      <span class="muted small">{{ formDef().hint }}</span>
+      <div class="field">
+        <label for="t-notes">Notas</label>
+        <input
+          id="t-notes"
+          class="input"
+          formControlName="notes"
+          placeholder="Condiciones, pista, sensaciones…"
+        />
+      </div>
+      <button class="btn btn-primary" type="submit" [disabled]="saving()">
+        {{ saving() ? 'Guardando…' : 'Guardar marca' }}
+      </button>
+    </form>
+  </section>
+
+  <section class="card">
+    <h2>Evolución · {{ selectedDef().name }}</h2>
+    <app-chart
+      [points]="series()"
+      [unit]="selectedDef().kind === 'reps' ? 'rep.' : 's'"
+      [format]="chartFormat()"
+      [title]="'Evolución: ' + selectedDef().name"
+      emptyText="Registra tu primera marca en esta prueba"
+    />
+    <p class="muted small hint">
+      {{
+        selectedDef().lowerIsBetter
+          ? 'Menos es mejor: la línea debería bajar.'
+          : 'Más es mejor: la línea debería subir.'
+      }}
+    </p>
+  </section>
+</div>
+
+<section class="card" style="margin-top: 1rem">
+  <h2>Historial · {{ selectedDef().name }}</h2>
+  @if (history().length === 0) {
+    <p class="empty">Sin marcas registradas.</p>
+  } @else {
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th class="num">Marca</th>
+            <th>Notas</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (r of history(); track r.id) {
+            <tr>
+              <td class="nowrap">{{ r.performedOn | date: 'EEE d MMM y' }}</td>
+              <td class="num">
+                <strong>{{ fmt(r.testType, r.result) }}</strong>
+              </td>
+              <td class="muted small">{{ r.notes }}</td>
+              <td class="num">
+                <button
+                  type="button"
+                  class="btn btn-ghost btn-sm"
+                  (click)="remove(r)"
+                  aria-label="Eliminar marca"
+                >
+                  ✕
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</section>

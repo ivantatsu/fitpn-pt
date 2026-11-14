@@ -13,7 +13,7 @@ import { RenewButton } from './renew-button';
     <div class="page-header">
       <div>
         <h1>Panel de administración</h1>
-        <p class="muted">Estado de los socios y su actividad.</p>
+        <p class="muted">Estado de los alumnos y su actividad.</p>
       </div>
       <a class="btn btn-primary" routerLink="usuarios/nuevo">+ Nuevo usuario</a>
     </div>
@@ -21,7 +21,7 @@ import { RenewButton } from './renew-button';
     @if (stats.value(); as s) {
       <div class="grid stats">
         <a class="card stat link" routerLink="usuarios" [queryParams]="{ status: 'active' }">
-          <div class="stat-label">Socios activos</div>
+          <div class="stat-label">Alumnos activos</div>
           <div class="stat-value">
             {{ s.activeMembers }}<small> / {{ s.totalMembers }}</small>
           </div>
@@ -37,7 +37,7 @@ import { RenewButton } from './renew-button';
         <div class="card stat">
           <div class="stat-label">Sesiones (7 días)</div>
           <div class="stat-value">{{ s.workoutsLast7Days }}</div>
-          <div class="muted small">{{ s.activeMembersLast7Days }} socios entrenando</div>
+          <div class="muted small">{{ s.activeMembersLast7Days }} alumnos entrenando</div>
         </div>
       </div>
     }
@@ -58,12 +58,12 @@ import { RenewButton } from './renew-button';
             <app-renew-button [user]="u" [primary]="true" (renewed)="refresh()" />
           </div>
         } @empty {
-          <p class="empty">Ningún socio caduca en los próximos 7 días.</p>
+          <p class="empty">Ningún alumno caduca en los próximos 7 días.</p>
         }
       </section>
 
       <section class="card">
-        <h2>Socios caducados</h2>
+        <h2>Alumnos caducados</h2>
         @for (u of expired.value()?.items; track u.id) {
           <div class="user-row">
             <div>
@@ -75,7 +75,7 @@ import { RenewButton } from './renew-button';
             <app-renew-button [user]="u" (renewed)="refresh()" />
           </div>
         } @empty {
-          <p class="empty">No hay socios caducados.</p>
+          <p class="empty">No hay alumnos caducados.</p>
         }
       </section>
     </div>

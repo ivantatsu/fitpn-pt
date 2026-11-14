@@ -10,12 +10,14 @@ import { StatusBadge } from '../../shared/status-badge';
 import { Measurements } from '../measurements/measurements';
 import { ExerciseProgress } from '../progress/exercise-progress';
 import { WorkoutList } from '../workouts/workout-list';
+import { PhysicalTests } from '../tests/physical-tests';
 import { RenewButton } from './renew-button';
 import { UserAccount } from './user-account';
 import { UserPlans } from './user-plans';
 
 const TABS = [
   { id: 'resumen', label: 'Resumen' },
+  { id: 'pruebas', label: 'Pruebas físicas' },
   { id: 'entrenamientos', label: 'Entrenamientos' },
   { id: 'planes', label: 'Planes' },
   { id: 'progreso', label: 'Progreso' },
@@ -39,6 +41,7 @@ type TabId = (typeof TABS)[number]['id'];
     ExerciseProgress,
     UserPlans,
     UserAccount,
+    PhysicalTests,
   ],
   template: `
     <a routerLink="/admin/usuarios" class="back">← Volver a usuarios</a>
@@ -84,10 +87,13 @@ type TabId = (typeof TABS)[number]['id'];
         @case ('resumen') {
           <app-progress-overview [userId]="u.id" />
         }
+        @case ('pruebas') {
+          <app-physical-tests [userId]="u.id" [embedded]="true" />
+        }
         @case ('entrenamientos') {
           <div class="row end">
             <a class="btn btn-primary btn-sm" [routerLink]="['entrenamientos', 'nuevo']"
-              >+ Registrar sesión para el socio</a
+              >+ Registrar sesión para el alumno</a
             >
           </div>
           <app-workout-list [userId]="u.id" [embedded]="true" />

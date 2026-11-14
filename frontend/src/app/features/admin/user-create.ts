@@ -46,7 +46,7 @@ import { generatePassword } from './password';
           <button type="button" class="btn" (click)="generate()">Generar</button>
         </div>
         <span class="muted small"
-          >Compártela con el socio de forma segura; podrá cambiarla desde su perfil.</span
+          >Compártela con el alumno de forma segura; podrá cambiarla desde su perfil.</span
         >
         @if (show('password')) {
           <span class="error-text">{{ errors()['password'] ?? 'Entre 8 y 72 caracteres' }}</span>
@@ -57,7 +57,7 @@ import { generatePassword } from './password';
         <div class="field">
           <label for="role">Rol</label>
           <select id="role" class="input" formControlName="role">
-            <option value="member">Socio (acceso con caducidad)</option>
+            <option value="member">Alumno (acceso con caducidad)</option>
             <option value="admin">Administrador (sin caducidad)</option>
           </select>
         </div>

@@ -3,6 +3,7 @@ import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } fro
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter } from 'rxjs';
 import { AuthService } from '../core/auth/auth.service';
+import { BrandMark } from '../shared/brand-mark';
 
 interface NavItem {
   path: string;
@@ -14,7 +15,7 @@ interface NavItem {
 /** Estructura principal: barra lateral de navegación + contenido. */
 @Component({
   selector: 'app-shell',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, BrandMark],
   templateUrl: './shell.html',
   styleUrl: './shell.scss',
 })
@@ -24,6 +25,7 @@ export class Shell {
 
   protected readonly trainingNav: NavItem[] = [
     { path: '/panel', label: 'Mi panel', icon: '◎' },
+    { path: '/pruebas', label: 'Pruebas físicas', icon: '⏱' },
     { path: '/entrenamientos', label: 'Entrenamientos', icon: '🏋' },
     { path: '/planes', label: 'Mis planes', icon: '☰' },
     { path: '/progreso', label: 'Progreso', icon: '↗' },
@@ -32,7 +34,7 @@ export class Shell {
 
   protected readonly adminNav: NavItem[] = [
     { path: '/admin', label: 'Resumen', icon: '▦', exact: true },
-    { path: '/admin/usuarios', label: 'Usuarios', icon: '👥' },
+    { path: '/admin/usuarios', label: 'Alumnos y usuarios', icon: '👥' },
     { path: '/admin/ejercicios', label: 'Ejercicios', icon: '✚' },
   ];
 

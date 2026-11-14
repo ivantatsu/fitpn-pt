@@ -5,7 +5,7 @@ import { userBase } from '../../core/api/training.api';
 import { Plan } from '../../core/models';
 import { PlanCard } from './plan-card';
 
-/** Planes de entrenamiento asignados al socio. */
+/** Planes de entrenamiento asignados al alumno. */
 @Component({
   selector: 'app-plan-list',
   imports: [PlanCard, RouterLink],
@@ -22,7 +22,7 @@ import { PlanCard } from './plan-card';
           @if (plans.isLoading()) {
             Cargando…
           } @else {
-            Tu entrenador todavía no te ha asignado ningún plan.
+            Tu instructor todavía no te ha asignado ningún plan.
           }
         </div>
       }

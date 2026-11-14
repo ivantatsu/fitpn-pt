@@ -3,55 +3,87 @@
    Tokens en variables CSS para tema claro/oscuro.
    ========================================================================== */
 
+/* Tipografía condensada para titulares (autoalojada: cumple la CSP font-src 'self'). */
+@import '@fontsource/barlow-condensed/600.css';
+@import '@fontsource/barlow-condensed/700.css';
+
+/* Paleta inspirada en el azul institucional y la bandera de España.
+   Es una estética propia: no usa emblemas ni logotipos oficiales. */
 :root {
   color-scheme: light dark;
 
-  --bg: #f4f6f8;
+  --bg: #eef1f6;
   --surface: #ffffff;
-  --surface-2: #f0f2f5;
-  --border: #dde2e8;
-  --text: #17202b;
-  --text-muted: #5d6b7a;
-  --primary: #0f9d6b;
-  --primary-strong: #0b7f56;
-  --primary-soft: #dff5ec;
-  --on-primary: #ffffff;
-  --danger: #d03b3b;
-  --danger-soft: #fbe5e5;
-  --warning: #b86e00;
-  --warning-soft: #fdf1dc;
-  --info: #2563eb;
-  --info-soft: #e3ecfd;
-  --chart-1: #0f9d6b;
-  --chart-2: #2563eb;
+  --surface-2: #f1f4f9;
+  --border: #d6dde8;
+  --text: #0f1b2d;
+  --text-muted: #56637a;
 
-  --radius: 12px;
-  --radius-sm: 8px;
-  --shadow: 0 1px 2px rgb(16 24 40 / 6%), 0 1px 3px rgb(16 24 40 / 10%);
+  --primary: #12407a; /* azul marino */
+  --primary-strong: #0b2c57;
+  --primary-soft: #e2eaf6;
+  --on-primary: #ffffff;
+
+  --navy-900: #071a33; /* barra lateral y cabeceras */
+  --navy-800: #0c2747;
+  --navy-700: #163a66;
+  --on-navy: #e8eef8;
+  --on-navy-muted: #9fb0cb;
+
+  --flag-red: #c60b1e;
+  --flag-yellow: #ffc400;
+  --gold: #c9a227;
+
+  --success: #13804f;
+  --success-soft: #dcf3e7;
+  --danger: #c4162a;
+  --danger-soft: #fbe3e6;
+  --warning: #a8650a;
+  --warning-soft: #fdf0d9;
+  --info: #1d5fbf;
+  --info-soft: #e1ebfb;
+  --chart-1: #12407a;
+  --chart-2: #c9a227;
+
+  --radius: 10px;
+  --radius-sm: 6px;
+  --shadow: 0 1px 2px rgb(7 26 51 / 6%), 0 2px 6px rgb(7 26 51 / 8%);
   --font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --sidebar-w: 240px;
+  --font-display: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  --sidebar-w: 248px;
+  --flag-stripe: linear-gradient(
+    180deg,
+    var(--flag-red) 0 25%,
+    var(--flag-yellow) 25% 75%,
+    var(--flag-red) 75% 100%
+  );
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #0e1319;
-    --surface: #161d26;
-    --surface-2: #1d2631;
-    --border: #2a3542;
-    --text: #e6ebf1;
-    --text-muted: #94a3b4;
-    --primary: #2fc48d;
-    --primary-strong: #4fd6a3;
-    --primary-soft: #133b2d;
-    --on-primary: #06281b;
-    --danger: #f06a6a;
-    --danger-soft: #3d1c1c;
+    --bg: #08121f;
+    --surface: #0f1d30;
+    --surface-2: #15263d;
+    --border: #233a57;
+    --text: #e5ecf6;
+    --text-muted: #93a4bd;
+    --primary: #5b9bf0;
+    --primary-strong: #8bb8f7;
+    --primary-soft: #16304f;
+    --on-primary: #061528;
+    --navy-900: #050f1d;
+    --navy-800: #0a1a2e;
+    --navy-700: #14304f;
+    --success: #3ccf8e;
+    --success-soft: #0f3324;
+    --danger: #f2667a;
+    --danger-soft: #3b1820;
     --warning: #f0b14d;
-    --warning-soft: #3b2c12;
-    --info: #6c9cf5;
-    --info-soft: #1a2846;
-    --chart-1: #2fc48d;
-    --chart-2: #6c9cf5;
+    --warning-soft: #3a2a11;
+    --info: #7aaaf2;
+    --info-soft: #16294a;
+    --chart-1: #5b9bf0;
+    --chart-2: #e0bb45;
     --shadow: none;
   }
 }
@@ -78,13 +110,23 @@ h1,
 h2,
 h3 {
   margin: 0 0 0.5rem;
-  line-height: 1.25;
+  line-height: 1.2;
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.01em;
 }
 h1 {
-  font-size: 1.6rem;
+  font-size: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 h2 {
-  font-size: 1.2rem;
+  font-size: 1.35rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+h3 {
+  font-size: 1.1rem;
 }
 h3 {
   font-size: 1rem;
@@ -164,14 +206,20 @@ a {
 }
 
 .stat {
+  border-top: 3px solid var(--primary);
+
   .stat-label {
     color: var(--text-muted);
-    font-size: 0.85rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
   }
   .stat-value {
-    font-size: 1.75rem;
+    font-family: var(--font-display);
+    font-size: 2.1rem;
     font-weight: 700;
-    line-height: 1.2;
+    line-height: 1.15;
   }
 }
 
@@ -195,6 +243,7 @@ a {
   color: var(--text);
   font: inherit;
   font-weight: 600;
+  letter-spacing: 0.01em;
   cursor: pointer;
   text-decoration: none;
   transition:
@@ -357,8 +406,8 @@ textarea.input {
   color: var(--text-muted);
 }
 .badge-success {
-  background: var(--primary-soft);
-  color: var(--primary-strong);
+  background: var(--success-soft);
+  color: var(--success);
 }
 .badge-warning {
   background: var(--warning-soft);

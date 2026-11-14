@@ -35,7 +35,7 @@ function passwordsMatch(group: AbstractControl): ValidationErrors | null {
             <dt>Email</dt>
             <dd>{{ u.email }}</dd>
             <dt>Rol</dt>
-            <dd>{{ u.role === 'admin' ? 'Administrador' : 'Socio' }}</dd>
+            <dd>{{ u.role === 'admin' ? 'Administrador' : 'Alumno' }}</dd>
             <dt>Suscripción</dt>
             <dd>
               <app-status-badge [status]="u.status" />

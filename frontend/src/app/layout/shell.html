@@ -1,12 +1,15 @@
 <div class="layout" [class.menu-open]="menuOpen()">
   <aside class="sidebar" id="sidebar">
     <a class="brand" routerLink="/">
-      <span class="logo" aria-hidden="true">F</span>
-      <span>FitPN</span>
+      <app-brand-mark [size]="40" />
+      <span class="brand-text">
+        <span class="brand-name">FitPN</span>
+        <span class="brand-tag">Preparación física</span>
+      </span>
     </a>
 
     <nav aria-label="Principal">
-      <p class="nav-title">Entrenamiento</p>
+      <p class="nav-title">Preparación</p>
       @for (item of trainingNav; track item.path) {
         <a [routerLink]="item.path" routerLinkActive="active" ariaCurrentWhenActive="page">
           <span class="icon" aria-hidden="true">{{ item.icon }}</span>{{ item.label }}
@@ -14,7 +17,7 @@
       }
 
       @if (auth.isAdmin()) {
-        <p class="nav-title">Administración</p>
+        <p class="nav-title">Mando · Administración</p>
         @for (item of adminNav; track item.path) {
           <a
             [routerLink]="item.path"
@@ -33,12 +36,10 @@
         <span class="avatar" aria-hidden="true">{{ initials() }}</span>
         <span class="who-text">
           <strong>{{ auth.user()?.fullName }}</strong>
-          <span class="muted small">{{ auth.isAdmin() ? 'Administrador' : 'Socio' }}</span>
+          <span class="role">{{ auth.isAdmin() ? 'Instructor · Admin' : 'Alumno' }}</span>
         </span>
       </a>
-      <button type="button" class="btn btn-ghost btn-sm" (click)="auth.logout()">
-        Cerrar sesión
-      </button>
+      <button type="button" class="btn btn-sm logout" (click)="auth.logout()">Cerrar sesión</button>
     </div>
   </aside>
 
@@ -55,12 +56,13 @@
       >
         ☰ <span class="sr-only">Menú</span>
       </button>
+      <app-brand-mark [size]="28" />
       <span class="brand-mobile">FitPN</span>
     </header>
 
     @if (expiringSoon()) {
       <div class="alert alert-warning expiring" role="status">
-        Tu suscripción caduca en {{ auth.user()?.daysRemaining }} día(s). Habla con tu entrenador
+        Tu suscripción caduca en {{ auth.user()?.daysRemaining }} día(s). Habla con tu instructor
         para renovarla y no perder el acceso.
       </div>
     }

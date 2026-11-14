@@ -1,4 +1,3 @@
-import { DecimalPipe } from '@angular/common';
 import { Component, computed, input } from '@angular/core';
 
 export interface ChartPoint {
@@ -24,7 +23,6 @@ export function niceStep(raw: number): number {
 
 @Component({
   selector: 'app-chart',
-  imports: [DecimalPipe],
   template: `
     @if (points().length === 0) {
       <p class="empty">{{ emptyText() }}</p>
@@ -40,7 +38,7 @@ export function niceStep(raw: number): number {
             [attr.y2]="t.y"
           />
           <text class="axis" [attr.x]="PAD.left - 8" [attr.y]="t.y + 4" text-anchor="end">
-            {{ t.value | number: '1.0-1' }}
+            {{ fmt(t.value) }}
           </text>
         }
         @for (l of xLabels(); track $index) {
@@ -58,7 +56,7 @@ export function niceStep(raw: number): number {
               [attr.height]="b.h"
               rx="3"
             >
-              <title>{{ b.label }}: {{ b.value | number: '1.0-1' }} {{ unit() }}</title>
+              <title>{{ b.label }}: {{ fmt(b.value, true) }}</title>
             </rect>
           }
         } @else {
@@ -66,7 +64,7 @@ export function niceStep(raw: number): number {
           <path class="line" [attr.d]="linePath()" />
           @for (p of coords(); track $index) {
             <circle class="dot" [attr.cx]="p.x" [attr.cy]="p.y" r="4">
-              <title>{{ p.label }}: {{ p.value | number: '1.0-1' }} {{ unit() }}</title>
+              <title>{{ p.label }}: {{ fmt(p.value, true) }}</title>
             </circle>
           }
         }
@@ -135,6 +133,15 @@ export class Chart {
   readonly emptyText = input('Aún no hay datos suficientes');
   /** Fuerza el eje Y a empezar en cero (por defecto en barras). */
   readonly zeroBased = input<boolean | undefined>(undefined);
+  /** Formateador opcional de valores (p. ej. tiempos en mm:ss). */
+  readonly format = input<((value: number) => string) | null>(null);
+
+  protected fmt(value: number, withUnit = false): string {
+    const custom = this.format();
+    if (custom) return custom(value);
+    const text = value.toLocaleString('es-ES', { maximumFractionDigits: 1 });
+    return withUnit && this.unit() ? `${text} ${this.unit()}` : text;
+  }
 
   protected readonly W = W;
   protected readonly H = H;

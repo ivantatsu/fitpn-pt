@@ -5,7 +5,7 @@ import { AdminApi } from '../../core/api/admin.api';
 import { User } from '../../core/models';
 import { NotificationService } from '../../core/notification.service';
 
-/** Botón de renovación rápida (+N meses) de un socio. */
+/** Botón de renovación rápida (+N meses) de un alumno. */
 @Component({
   selector: 'app-renew-button',
   template: `

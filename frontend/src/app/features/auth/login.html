@@ -1,10 +1,23 @@
 <div class="login-page">
+  <section class="hero" aria-hidden="true">
+    <div class="hero-inner">
+      <app-brand-mark [size]="72" />
+      <p class="eyebrow">Oposición · Policía Nacional</p>
+      <h2>Preparación física<br />para superar las pruebas</h2>
+      <ul>
+        <li>Circuito de agilidad</li>
+        <li>Dominadas · Suspensión en barra</li>
+        <li>Carrera de 1000 metros</li>
+      </ul>
+    </div>
+  </section>
+
   <section class="panel">
     <div class="brand">
-      <span class="logo" aria-hidden="true">F</span>
+      <app-brand-mark [size]="48" />
       <div>
         <h1>FitPN</h1>
-        <p class="muted">Tu plataforma de entrenamiento personal</p>
+        <p class="muted">Acceso de alumnos e instructores</p>
       </div>
     </div>
 
@@ -51,7 +64,11 @@
     </form>
 
     <p class="muted small help">
-      ¿No tienes cuenta o se ha caducado? Las altas y renovaciones las gestiona tu entrenador.
+      Las altas y renovaciones las gestiona tu instructor. ¿Suscripción caducada? Habla con él.
+    </p>
+    <p class="disclaimer">
+      Plataforma independiente de preparación física. No está vinculada a la Dirección General de la
+      Policía.
     </p>
   </section>
 </div>

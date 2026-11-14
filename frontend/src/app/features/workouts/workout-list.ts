@@ -79,7 +79,7 @@ const PAGE_SIZE = 20;
   `,
 })
 export class WorkoutList {
-  /** Socio cuyo historial se muestra (solo administradores). */
+  /** Alumno cuyo historial se muestra (solo administradores). */
   readonly userId = input(null, { transform: optionalId });
   /** Oculta la cabecera cuando se incrusta en otra página. */
   readonly embedded = input(false);

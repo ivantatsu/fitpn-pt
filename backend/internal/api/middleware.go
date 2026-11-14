@@ -130,9 +130,9 @@ func (s *Server) checkAccess(w http.ResponseWriter, u store.User) bool {
 		return true
 	}
 	if u.Disabled {
-		writeError(w, http.StatusForbidden, "account_disabled", "Tu cuenta está deshabilitada. Contacta con tu entrenador.")
+		writeError(w, http.StatusForbidden, "account_disabled", "Tu cuenta está deshabilitada. Contacta con tu instructor.")
 	} else {
-		writeError(w, http.StatusForbidden, "membership_expired", "Tu suscripción ha caducado. Contacta con tu entrenador para renovarla.")
+		writeError(w, http.StatusForbidden, "membership_expired", "Tu suscripción ha caducado. Contacta con tu instructor para renovarla.")
 	}
 	return false
 }

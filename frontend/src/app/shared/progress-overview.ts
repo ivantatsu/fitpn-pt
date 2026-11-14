@@ -109,7 +109,7 @@ import { shortDate } from './format';
   `,
 })
 export class ProgressOverview {
-  /** Si se indica, se muestra el progreso de ese socio (vista de administrador). */
+  /** Si se indica, se muestra el progreso de ese alumno (vista de administrador). */
   readonly userId = input<number | null>(null);
   readonly weeks = input(12);
 

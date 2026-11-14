@@ -4,16 +4,17 @@ import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { errorCode, errorMessage } from '../../core/api-error';
 import { AuthService } from '../../core/auth/auth.service';
+import { BrandMark } from '../../shared/brand-mark';
 
 const REASONS: Record<string, string> = {
-  membership_expired: 'Tu suscripción ha caducado. Contacta con tu entrenador para renovarla.',
-  account_disabled: 'Tu cuenta está deshabilitada. Contacta con tu entrenador.',
+  membership_expired: 'Tu suscripción ha caducado. Contacta con tu instructor para renovarla.',
+  account_disabled: 'Tu cuenta está deshabilitada. Contacta con tu instructor.',
   session_expired: 'Tu sesión ha caducado. Vuelve a iniciar sesión.',
 };
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, BrandMark],
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })

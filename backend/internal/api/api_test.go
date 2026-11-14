@@ -387,6 +387,40 @@ func TestLoginRateLimit(t *testing.T) {
 	}
 }
 
+func TestPhysicalTests(t *testing.T) {
+	env := newTestEnv(t)
+	admin := env.client()
+	admin.login("admin@fitpn.test", "admin-password")
+	var member userResponse
+	admin.do("POST", "/api/v1/admin/users", createUserRequest{Email: "op@fitpn.test", FullName: "Opositor", Password: "member-password"}, &member)
+	c := env.client()
+	c.login("op@fitpn.test", "member-password")
+	today := env.clock.Format(store.DateLayout)
+
+	if code := c.do("POST", "/api/v1/me/tests", testResultRequest{TestType: "run_1000m", Result: 215.5, PerformedOn: today}, nil); code != http.StatusCreated {
+		t.Fatalf("crear marca: %d", code)
+	}
+	var eb errBody
+	if code := c.do("POST", "/api/v1/me/tests", testResultRequest{TestType: "run_1000m", Result: 30, PerformedOn: today}, &eb); code != http.StatusUnprocessableEntity || eb.Error.Fields["result"] == "" {
+		t.Fatalf("marca fuera de rango: %d %+v", code, eb)
+	}
+	if code := c.do("POST", "/api/v1/me/tests", testResultRequest{TestType: "pull_ups", Result: 7.5, PerformedOn: today}, nil); code != http.StatusUnprocessableEntity {
+		t.Fatalf("dominadas decimales: %d", code)
+	}
+	if code := c.do("POST", "/api/v1/me/tests", testResultRequest{TestType: "salto", Result: 2, PerformedOn: today}, nil); code != http.StatusUnprocessableEntity {
+		t.Fatalf("prueba desconocida: %d", code)
+	}
+
+	var results []store.TestResult
+	admin.do("GET", "/api/v1/admin/users/"+strconv.FormatInt(member.ID, 10)+"/tests", nil, &results)
+	if len(results) != 1 || results[0].Result != 215.5 {
+		t.Fatalf("vista admin de marcas: %+v", results)
+	}
+	if code := admin.do("DELETE", "/api/v1/me/tests/"+strconv.FormatInt(results[0].ID, 10), nil, nil); code != http.StatusNotFound {
+		t.Fatalf("un usuario no borra marcas ajenas por /me: %d", code)
+	}
+}
+
 func mustURL(raw string) *urlT {
 	u, err := parseURL(raw)
 	if err != nil {

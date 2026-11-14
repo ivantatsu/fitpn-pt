@@ -129,6 +129,10 @@ func (s *Server) registerUserData(mux *http.ServeMux, prefix string, guard func(
 
 	mux.HandleFunc("GET "+prefix+"/plans", guard(s.handleListPlans))
 
+	mux.HandleFunc("GET "+prefix+"/tests", guard(s.handleListTestResults))
+	mux.HandleFunc("POST "+prefix+"/tests", guard(s.handleCreateTestResult))
+	mux.HandleFunc("DELETE "+prefix+"/tests/{testID}", guard(s.handleDeleteTestResult))
+
 	mux.HandleFunc("GET "+prefix+"/progress/summary", guard(s.handleProgressSummary))
 	mux.HandleFunc("GET "+prefix+"/progress/exercises/{exerciseID}", guard(s.handleExerciseProgress))
 }

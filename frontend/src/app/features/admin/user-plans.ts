@@ -9,7 +9,7 @@ import { NotificationService } from '../../core/notification.service';
 import { PlanCard } from '../plans/plan-card';
 import { PlanEditor } from './plan-editor';
 
-/** Gestión de los planes asignados a un socio. */
+/** Gestión de los planes asignados a un alumno. */
 @Component({
   selector: 'app-user-plans',
   imports: [PlanCard, PlanEditor],
@@ -38,7 +38,7 @@ import { PlanEditor } from './plan-editor';
             </div>
           </app-plan-card>
         } @empty {
-          <p class="card empty">Este socio no tiene planes asignados.</p>
+          <p class="card empty">Este alumno no tiene planes asignados.</p>
         }
       </div>
     }

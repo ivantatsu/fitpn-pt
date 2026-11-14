@@ -8,15 +8,17 @@ import { Page, Plan, Workout } from '../../core/models';
 import { ProgressOverview } from '../../shared/progress-overview';
 import { StatusBadge } from '../../shared/status-badge';
 import { WorkoutTable } from '../../shared/workout-table';
+import { summarize, TestResult } from '../../core/physical-tests';
+import { TestCards } from '../tests/test-cards';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [RouterLink, DatePipe, ProgressOverview, StatusBadge, WorkoutTable],
+  imports: [RouterLink, DatePipe, ProgressOverview, StatusBadge, WorkoutTable, TestCards],
   template: `
     <div class="page-header">
       <div>
-        <h1>Hola, {{ firstName() }} 👋</h1>
-        <p class="muted">Este es el resumen de tu progreso.</p>
+        <h1>Hola, {{ firstName() }}</h1>
+        <p class="muted">Tu preparación física, al día. Constancia y disciplina.</p>
       </div>
       <a class="btn btn-primary" routerLink="/entrenamientos/nuevo">+ Registrar entrenamiento</a>
     </div>
@@ -51,10 +53,18 @@ import { WorkoutTable } from '../../shared/workout-table';
             <p class="muted small">{{ p.items.length }} ejercicios prescritos</p>
             <a routerLink="/planes">Ver plan completo →</a>
           } @else {
-            <p class="muted">Tu entrenador aún no te ha asignado un plan.</p>
+            <p class="muted">Tu instructor aún no te ha asignado un plan.</p>
           }
         </section>
       </div>
+
+      <section class="stack tests">
+        <div class="page-header compact">
+          <h2>Pruebas físicas · mejores marcas</h2>
+          <a routerLink="/pruebas">Registrar simulacro →</a>
+        </div>
+        <app-test-cards [summaries]="testSummaries()" [selectable]="false" />
+      </section>
 
       <app-progress-overview />
 
@@ -85,5 +95,9 @@ export class Dashboard {
   protected readonly firstName = computed(() => this.auth.user()?.fullName.split(' ')[0] ?? '');
   protected readonly recent = httpResource<Page<Workout>>(() => `${userBase()}/workouts?limit=5`);
   private readonly plans = httpResource<Plan[]>(() => `${userBase()}/plans`);
+  private readonly tests = httpResource<TestResult[]>(() => `${userBase()}/tests`, {
+    defaultValue: [],
+  });
+  protected readonly testSummaries = computed(() => summarize(this.tests.value()));
   protected readonly activePlan = computed(() => this.plans.value()?.find((p) => p.isActive));
 }

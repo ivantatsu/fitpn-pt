@@ -5,7 +5,7 @@ import { Exercise, Measurement, MeasurementInput, Workout, WorkoutInput } from '
 
 /**
  * Prefijo de los datos de entrenamiento de un usuario: los del propio usuario
- * (`/me`) o los de un socio concreto cuando quien consulta es un administrador.
+ * (`/me`) o los de un alumno concreto cuando quien consulta es un administrador.
  */
 export function userBase(userId?: number | null): string {
   return userId ? `/api/v1/admin/users/${userId}` : '/api/v1/me';

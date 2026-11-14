@@ -1,12 +1,18 @@
-# FitPN · Plataforma de entrenamiento personal
+# FitPN · Preparación física para oposiciones a Policía Nacional
 
-Aplicación web para gestionar a los socios de un entrenador o centro deportivo y hacer seguimiento
-de su progreso físico.
+Aplicación web para que una academia o un preparador gestione a sus alumnos y haga seguimiento de
+su **preparación física**, con especial atención a las pruebas de la oposición: circuito de
+agilidad, dominadas o suspensión en barra y carrera de 1000 m.
+
+> FitPN es una plataforma **independiente** de preparación física. No está vinculada a la
+> Dirección General de la Policía ni utiliza su escudo ni sus emblemas oficiales.
 
 - **Acceso con usuario y contraseña.** Las altas las hace un administrador; no hay registro público.
 - **Suscripción mensual.** Cada socio tiene acceso durante **1 mes** desde su alta. Cuando caduca,
   pierde el acceso al momento, salvo que un administrador lo **renueve**. Los **administradores
   no caducan nunca**.
+- **Pruebas físicas de la oposición.** Registro de simulacros con la mejor marca, la tendencia y
+  la evolución de cada prueba.
 - **Formación y progreso.** Planes de entrenamiento asignados por el entrenador, registro de
   sesiones (ejercicios, series, repeticiones y peso), medidas corporales, récords personales,
   1RM estimado, volumen semanal y racha de entrenamiento.
@@ -33,10 +39,13 @@ de su progreso físico.
 
 ## Funcionalidades
 
-### Socio (`member`)
+En la interfaz, los socios se llaman **alumnos** y los administradores, **instructores**.
+
+### Alumno (`member`)
 
 | Sección            | Qué puede hacer                                                                                 |
 | ------------------ | ----------------------------------------------------------------------------------------------- |
+| **Pruebas físicas**| Registrar marcas del circuito de agilidad (s), dominadas (rep.), suspensión en barra (s) y 1000 m (mm:ss). Muestra la mejor marca, si el último intento mejora al anterior, un gráfico de evolución y el historial. |
 | **Mi panel**       | Estado de la suscripción y días restantes, plan actual, indicadores de 30 días, gráficos y récords. |
 | **Entrenamientos** | Registrar, editar y eliminar sesiones. Puede precargar una sesión a partir de un día de su plan.   |
 | **Mis planes**     | Consultar los planes que le ha asignado su entrenador, agrupados por día.                       |
@@ -54,8 +63,21 @@ Además de todo lo anterior:
 | ----------------------- | ------------------------------------------------------------------------------------------------------------ |
 | **Resumen**             | Socios activos, a punto de caducar (≤ 7 días) y caducados, actividad de la última semana y renovación en un clic. |
 | **Usuarios**            | Buscar y filtrar por estado; crear socios o administradores; renovar con +1 mes o +3 meses.                  |
-| **Ficha de usuario**    | Progreso, entrenamientos, planes (crear y editar), medidas, historial de renovaciones, ajuste manual de la caducidad, bloqueo, restablecer contraseña y baja. |
-| **Ejercicios**          | Mantener el catálogo de ejercicios. Se incluyen 17 de inicio.                                                   |
+| **Ficha de usuario**    | Pruebas físicas, progreso, entrenamientos, planes (crear y editar), medidas, historial de renovaciones, ajuste manual de la caducidad, bloqueo, restablecer contraseña y baja. |
+| **Ejercicios**          | Mantener el catálogo de ejercicios. Se incluyen 21 de inicio, varios de ellos específicos de las pruebas.       |
+
+### Estética
+
+La identidad visual se inspira en el azul marino institucional y en la bandera de España:
+
+- Barra lateral azul marino con una franja rojigualda.
+- Acentos dorados.
+- Titulares en tipografía condensada (Barlow Condensed, alojada en la propia aplicación, así que
+  no necesita un CDN y respeta la CSP).
+
+El emblema es un escudo genérico con una mancuerna, de diseño propio: **no se usa el escudo ni
+ningún logotipo oficial** de la Policía Nacional. Todos los colores están en variables CSS en
+`frontend/src/styles.scss`, así que se pueden ajustar fácilmente, y hay modo oscuro automático.
 
 ---
 
@@ -288,6 +310,8 @@ Códigos de error relevantes: `invalid_credentials`, `membership_expired`, `acco
 | GET · POST          | `/me/measurements`                    | Medidas corporales.                             |
 | DELETE              | `/me/measurements/{id}`               |                                                |
 | GET                 | `/me/plans`                           | Planes asignados.                               |
+| GET · POST          | `/me/tests`                           | Marcas de las pruebas físicas (`testType`: `agility_circuit`, `pull_ups`, `bar_hang`, `run_1000m`; `result` en segundos o repeticiones). |
+| DELETE              | `/me/tests/{id}`                      |                                                |
 | GET                 | `/me/progress/summary?weeks=12`       | Indicadores, serie semanal, peso y récords.     |
 | GET                 | `/me/progress/exercises/{exerciseId}` | Evolución de un ejercicio.                      |
 | GET                 | `/exercises`                          | Catálogo de ejercicios.                         |
@@ -303,7 +327,7 @@ Códigos de error relevantes: `invalid_credentials`, `membership_expired`, `acco
 | GET                  | `/admin/users/{id}/renewals`               | Historial de renovaciones.                                          |
 | PUT                  | `/admin/users/{id}/password`               | Restablecer la contraseña.                                          |
 | POST · PUT · DELETE  | `/admin/users/{id}/plans[/{planId}]`       | Gestión de planes del socio.                                        |
-| *                    | `/admin/users/{id}/workouts…`, `/measurements…`, `/plans`, `/progress…` | Mismas rutas que `/me/…`, pero sobre el socio indicado. |
+| *                    | `/admin/users/{id}/workouts…`, `/measurements…`, `/tests…`, `/plans`, `/progress…` | Mismas rutas que `/me/…`, pero sobre el socio indicado. |
 | POST · PUT · DELETE  | `/exercises[/{id}]`                        | Gestión del catálogo (no se puede borrar un ejercicio en uso).      |
 
 ### Sondas
@@ -374,6 +398,9 @@ make lint            # gofmt, go vet, prettier
   partir de `active_until`.
 
 ### Ideas para siguientes versiones
+
+- **Puntuación según el baremo oficial** de cada prueba, por sexo, para calcular la nota prevista y
+  mostrar si se supera el mínimo. Hay que cargar las tablas de la convocatoria vigente (BOE).
 
 - Recuperación de contraseña por email y aviso automático unos días antes de que caduque la suscripción.
 - Integración con pasarela de pago (por ejemplo Stripe) para que la renovación sea automática.

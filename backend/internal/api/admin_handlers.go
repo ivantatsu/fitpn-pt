@@ -280,7 +280,7 @@ func (s *Server) handleRenewUser(w http.ResponseWriter, r *http.Request) {
 	}
 	u, err := s.store.RenewMembership(r.Context(), id, currentUser(r).ID, req.Months, s.now())
 	if errors.Is(err, store.ErrConflict) {
-		writeError(w, http.StatusConflict, "not_member", "Solo se pueden renovar socios; los administradores no caducan")
+		writeError(w, http.StatusConflict, "not_member", "Solo se pueden renovar alumnos; los administradores no caducan")
 		return
 	}
 	if err != nil {

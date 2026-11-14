@@ -31,7 +31,8 @@ export class NotificationService {
 
   private push(kind: Toast['kind'], text: string, ttl = 3500): void {
     const id = this.nextId++;
-    this._toasts.update((list) => [...list, { id, kind, text }]);
+    // Como máximo 3 avisos visibles a la vez.
+    this._toasts.update((list) => [...list, { id, kind, text }].slice(-3));
     setTimeout(() => this.dismiss(id), ttl);
   }
 }
