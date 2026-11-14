@@ -1,0 +1,58 @@
+.login-page {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  padding: 1.5rem;
+  background:
+    radial-gradient(
+      circle at 15% 20%,
+      color-mix(in srgb, var(--primary) 18%, transparent),
+      transparent 45%
+    ),
+    radial-gradient(
+      circle at 85% 80%,
+      color-mix(in srgb, var(--info) 14%, transparent),
+      transparent 45%
+    ),
+    var(--bg);
+}
+
+.panel {
+  width: min(420px, 100%);
+  padding: 2rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 20px 50px rgb(0 0 0 / 12%);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin-bottom: 1.5rem;
+
+  h1 {
+    margin: 0;
+  }
+  p {
+    margin: 0;
+  }
+}
+
+.logo {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: var(--primary);
+  color: var(--on-primary);
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.help {
+  margin: 1.25rem 0 0;
+  text-align: center;
+}

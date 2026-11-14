@@ -1,0 +1,138 @@
+<div class="grid cols">
+  <section class="card">
+    <h2>Datos de la cuenta</h2>
+    <form [formGroup]="form" (ngSubmit)="save()" class="stack" novalidate>
+      <div class="field">
+        <label for="ua-name">Nombre completo</label>
+        <input id="ua-name" class="input" formControlName="fullName" />
+        @if (errors()['fullName']; as e) {
+          <span class="error-text">{{ e }}</span>
+        }
+      </div>
+      <div class="field">
+        <label for="ua-email">Email</label>
+        <input id="ua-email" class="input" type="email" formControlName="email" />
+        @if (errors()['email']; as e) {
+          <span class="error-text">{{ e }}</span>
+        }
+      </div>
+      <div class="field">
+        <label for="ua-role">Rol</label>
+        <select id="ua-role" class="input" formControlName="role">
+          <option value="member">Socio</option>
+          <option value="admin">Administrador</option>
+        </select>
+        @if (form.controls.role.value !== user().role) {
+          <span class="muted small">
+            @if (form.controls.role.value === 'admin') {
+              Los administradores no caducan nunca.
+            } @else {
+              Se le asignará un mes de acceso a partir de hoy.
+            }
+          </span>
+        }
+      </div>
+      @if (user().role === 'member' && form.controls.role.value === 'member') {
+        <div class="field">
+          <label for="ua-until">Acceso hasta (ajuste manual)</label>
+          <input id="ua-until" class="input" type="date" formControlName="activeUntil" />
+          <span class="muted small">Para ampliar el acceso normalmente usa «Renovar».</span>
+        </div>
+      }
+      @if (!isSelf()) {
+        <label class="checkbox">
+          <input type="checkbox" formControlName="disabled" />
+          Cuenta deshabilitada (bloquea el acceso inmediatamente)
+        </label>
+      }
+      <div class="row end">
+        <button class="btn btn-primary" type="submit" [disabled]="busy()">Guardar cambios</button>
+      </div>
+    </form>
+  </section>
+
+  <div class="stack">
+    @if (user().role === 'member') {
+      <section class="card">
+        <h2>Renovar suscripción</h2>
+        <p class="muted small">
+          Si sigue activa, los meses se suman a la fecha actual de caducidad; si ya caducó, cuentan
+          desde hoy.
+        </p>
+        <div class="row">
+          <select
+            class="input"
+            style="max-width: 160px"
+            aria-label="Meses"
+            #m
+            (change)="renewMonths.set(+m.value)"
+          >
+            @for (n of [1, 2, 3, 6, 12]; track n) {
+              <option [value]="n">{{ n }} {{ n === 1 ? 'mes' : 'meses' }}</option>
+            }
+          </select>
+          <button type="button" class="btn btn-primary" (click)="renew()" [disabled]="busy()">
+            Renovar
+          </button>
+        </div>
+
+        <h3 style="margin-top: 1.25rem">Historial de renovaciones</h3>
+        @if (renewals.value().length === 0) {
+          <p class="muted small">Sin renovaciones todavía.</p>
+        } @else {
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th class="num">Meses</th>
+                  <th>Nueva caducidad</th>
+                  <th>Por</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (r of renewals.value(); track r.id) {
+                  <tr>
+                    <td class="nowrap">{{ r.createdAt | date: 'd MMM y' }}</td>
+                    <td class="num">{{ r.months }}</td>
+                    <td class="nowrap">{{ r.newUntil | date: 'd MMM y' }}</td>
+                    <td class="muted small">{{ r.renewedByName ?? '—' }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </section>
+    }
+
+    <section class="card">
+      <h2>Restablecer contraseña</h2>
+      <div class="row">
+        <input
+          class="input pw"
+          type="text"
+          aria-label="Nueva contraseña"
+          placeholder="Nueva contraseña"
+          [value]="newPassword()"
+          (input)="newPassword.set($any($event.target).value)"
+          autocomplete="new-password"
+        />
+        <button type="button" class="btn" (click)="generatePassword()">Generar</button>
+        <button type="button" class="btn btn-primary" (click)="resetPassword()" [disabled]="busy()">
+          Aplicar
+        </button>
+      </div>
+    </section>
+
+    @if (!isSelf()) {
+      <section class="card danger-zone">
+        <h2>Zona peligrosa</h2>
+        <p class="muted small">Elimina al usuario y todo su historial. No se puede deshacer.</p>
+        <button type="button" class="btn btn-danger" (click)="remove()" [disabled]="busy()">
+          Eliminar usuario
+        </button>
+      </section>
+    }
+  </div>
+</div>

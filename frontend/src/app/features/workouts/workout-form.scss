@@ -1,0 +1,62 @@
+.back {
+  display: inline-block;
+  margin-bottom: 1rem;
+}
+.compact {
+  margin-bottom: 0.75rem;
+}
+.plan-loader {
+  min-width: 240px;
+}
+.exercise {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.9rem;
+  background: var(--surface-2);
+}
+.exercise-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+
+  select {
+    flex: 1 1 220px;
+  }
+}
+.index {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: var(--on-primary);
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+.actions {
+  gap: 0.25rem;
+}
+.sets {
+  margin-top: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  max-width: 460px;
+}
+.set {
+  display: grid;
+  grid-template-columns: 50px 1fr 1fr 40px;
+  gap: 0.5rem;
+  align-items: center;
+}
+.add-set {
+  align-self: flex-start;
+}
+.add-exercise {
+  margin-top: 1rem;
+}
+.end {
+  justify-content: flex-end;
+}

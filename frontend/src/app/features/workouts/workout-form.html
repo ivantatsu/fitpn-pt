@@ -1,0 +1,181 @@
+<a [routerLink]="listLink()" class="back">← Volver a entrenamientos</a>
+
+<div class="page-header">
+  <h1>{{ isEdit() ? 'Editar entrenamiento' : 'Registrar entrenamiento' }}</h1>
+</div>
+
+<form [formGroup]="form" (ngSubmit)="save()" class="stack" novalidate>
+  <section class="card">
+    <div class="form-grid">
+      <div class="field">
+        <label for="title">Título</label>
+        <input id="title" class="input" formControlName="title" placeholder="Ej.: Torso fuerza" />
+        @if (form.controls.title.touched && form.controls.title.invalid) {
+          <span class="error-text">El título es obligatorio</span>
+        }
+      </div>
+      <div class="field">
+        <label for="performedOn">Fecha</label>
+        <input
+          id="performedOn"
+          class="input"
+          type="date"
+          formControlName="performedOn"
+          [max]="today"
+        />
+        @if (serverErrors()['performedOn']; as e) {
+          <span class="error-text">{{ e }}</span>
+        }
+      </div>
+      <div class="field">
+        <label for="duration">Duración (min)</label>
+        <input
+          id="duration"
+          class="input"
+          type="number"
+          min="0"
+          formControlName="durationMinutes"
+        />
+      </div>
+      <div class="field">
+        <label for="rpe">Esfuerzo percibido (1-10)</label>
+        <input
+          id="rpe"
+          class="input"
+          type="number"
+          min="1"
+          max="10"
+          formControlName="perceivedEffort"
+        />
+        @if (form.controls.perceivedEffort.touched && form.controls.perceivedEffort.invalid) {
+          <span class="error-text">Valor entre 1 y 10</span>
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="page-header compact">
+      <h2>Ejercicios</h2>
+      @if (!isEdit() && planDays().length > 0) {
+        <label class="field plan-loader">
+          <span class="sr-only">Cargar desde plan</span>
+          <select class="input" #planSel (change)="loadPlanDay(planSel.value); planSel.value = ''">
+            <option value="">Cargar desde mi plan…</option>
+            @for (d of planDays(); track d.key) {
+              <option [value]="d.key">{{ d.label }}</option>
+            }
+          </select>
+        </label>
+      }
+    </div>
+
+    <div formArrayName="exercises" class="stack">
+      @for (ex of exerciseArray.controls; track ex; let i = $index) {
+        <div class="exercise" [formGroupName]="i">
+          <div class="exercise-head">
+            <span class="index">{{ i + 1 }}</span>
+            <select
+              class="input"
+              formControlName="exerciseId"
+              [attr.aria-label]="'Ejercicio ' + (i + 1)"
+            >
+              <option [ngValue]="null" disabled>Selecciona un ejercicio…</option>
+              @for (g of groupedExercises(); track g[0]) {
+                <optgroup [label]="g[0]">
+                  @for (e of g[1]; track e.id) {
+                    <option [ngValue]="e.id">{{ e.name }}</option>
+                  }
+                </optgroup>
+              }
+            </select>
+            <div class="row actions">
+              <button
+                type="button"
+                class="btn btn-ghost btn-sm"
+                (click)="moveExercise(i, -1)"
+                [disabled]="i === 0"
+                aria-label="Subir"
+              >
+                ↑
+              </button>
+              <button
+                type="button"
+                class="btn btn-ghost btn-sm"
+                (click)="moveExercise(i, 1)"
+                [disabled]="i === exerciseArray.length - 1"
+                aria-label="Bajar"
+              >
+                ↓
+              </button>
+              <button type="button" class="btn btn-danger btn-sm" (click)="removeExercise(i)">
+                Quitar
+              </button>
+            </div>
+          </div>
+
+          <div formArrayName="sets" class="sets">
+            <div class="set set-header muted small">
+              <span>Serie</span><span>Reps</span><span>Peso (kg)</span><span></span>
+            </div>
+            @for (s of setsOf(i).controls; track s; let j = $index) {
+              <div class="set" [formGroupName]="j">
+                <span class="muted">{{ j + 1 }}</span>
+                <input
+                  class="input"
+                  type="number"
+                  min="0"
+                  formControlName="reps"
+                  [attr.aria-label]="'Repeticiones serie ' + (j + 1)"
+                />
+                <input
+                  class="input"
+                  type="number"
+                  min="0"
+                  step="0.5"
+                  formControlName="weightKg"
+                  [attr.aria-label]="'Peso serie ' + (j + 1)"
+                />
+                <button
+                  type="button"
+                  class="btn btn-ghost btn-sm"
+                  (click)="removeSet(i, j)"
+                  [disabled]="setsOf(i).length === 1"
+                  aria-label="Eliminar serie"
+                >
+                  ✕
+                </button>
+              </div>
+            }
+            <button type="button" class="btn btn-sm add-set" (click)="addSet(i)">+ Serie</button>
+          </div>
+        </div>
+      } @empty {
+        <p class="empty">Añade los ejercicios que has realizado.</p>
+      }
+    </div>
+
+    <button type="button" class="btn add-exercise" (click)="addExercise()">
+      + Añadir ejercicio
+    </button>
+  </section>
+
+  <section class="card">
+    <div class="field">
+      <label for="notes">Notas</label>
+      <textarea
+        id="notes"
+        class="input"
+        formControlName="notes"
+        placeholder="¿Cómo te has sentido?"
+      ></textarea>
+    </div>
+  </section>
+
+  <div class="row end">
+    <a class="btn" [routerLink]="listLink()">Cancelar</a>
+    <button type="submit" class="btn btn-primary" [disabled]="saving()">
+      {{ saving() ? 'Guardando…' : 'Guardar entrenamiento' }}
+    </button>
+  </div>
+</form>

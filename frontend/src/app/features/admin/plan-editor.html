@@ -1,0 +1,80 @@
+<form [formGroup]="form" (ngSubmit)="save()" class="card stack" novalidate>
+  <h2>{{ plan() ? 'Editar plan' : 'Nuevo plan' }}</h2>
+  <div class="form-grid">
+    <div class="field">
+      <label for="pe-title">Título</label>
+      <input
+        id="pe-title"
+        class="input"
+        formControlName="title"
+        placeholder="Ej.: Hipertrofia 4 días"
+      />
+    </div>
+    <label class="checkbox">
+      <input type="checkbox" formControlName="isActive" /> Plan activo (visible como plan actual)
+    </label>
+  </div>
+  <div class="field">
+    <label for="pe-desc">Descripción / indicaciones</label>
+    <textarea id="pe-desc" class="input" formControlName="description"></textarea>
+  </div>
+
+  <h3>Ejercicios</h3>
+  <div formArrayName="items">
+    @for (it of form.controls.items.controls; track it; let i = $index) {
+      <div class="item" [formGroupName]="i">
+        <div class="field">
+          <label class="small" [for]="'day' + i">Día</label>
+          <input [id]="'day' + i" class="input" formControlName="dayLabel" />
+        </div>
+        <div class="field">
+          <label class="small" [for]="'ex' + i">Ejercicio</label>
+          <select [id]="'ex' + i" class="input" formControlName="exerciseId">
+            <option [ngValue]="null" disabled>Selecciona…</option>
+            @for (e of sortedExercises(); track e.id) {
+              <option [ngValue]="e.id">{{ e.name }}</option>
+            }
+          </select>
+        </div>
+        <div class="field">
+          <label class="small" [for]="'sets' + i">Series</label>
+          <input [id]="'sets' + i" class="input" type="number" min="1" formControlName="sets" />
+        </div>
+        <div class="field">
+          <label class="small" [for]="'reps' + i">Reps</label>
+          <input [id]="'reps' + i" class="input" formControlName="reps" />
+        </div>
+        <div class="field">
+          <label class="small" [for]="'rest' + i">Descanso (s)</label>
+          <input
+            [id]="'rest' + i"
+            class="input"
+            type="number"
+            min="0"
+            formControlName="restSeconds"
+          />
+        </div>
+        <div class="field">
+          <label class="small" [for]="'notes' + i">Notas</label>
+          <input [id]="'notes' + i" class="input" formControlName="notes" />
+        </div>
+        <button
+          type="button"
+          class="btn btn-ghost btn-sm"
+          (click)="removeItem(i)"
+          aria-label="Quitar ejercicio"
+        >
+          ✕
+        </button>
+      </div>
+    }
+  </div>
+  <div>
+    <button type="button" class="btn btn-sm" (click)="addItem()">+ Añadir ejercicio</button>
+  </div>
+
+  <div class="row end">
+    <button type="button" class="btn" (click)="cancelled.emit()">Cancelar</button>
+    <button type="submit" class="btn btn-primary" [disabled]="saving()">Guardar plan</button>
+  </div>
+</form>

@@ -1,0 +1,72 @@
+<div class="layout" [class.menu-open]="menuOpen()">
+  <aside class="sidebar" id="sidebar">
+    <a class="brand" routerLink="/">
+      <span class="logo" aria-hidden="true">F</span>
+      <span>FitPN</span>
+    </a>
+
+    <nav aria-label="Principal">
+      <p class="nav-title">Entrenamiento</p>
+      @for (item of trainingNav; track item.path) {
+        <a [routerLink]="item.path" routerLinkActive="active" ariaCurrentWhenActive="page">
+          <span class="icon" aria-hidden="true">{{ item.icon }}</span>{{ item.label }}
+        </a>
+      }
+
+      @if (auth.isAdmin()) {
+        <p class="nav-title">Administración</p>
+        @for (item of adminNav; track item.path) {
+          <a
+            [routerLink]="item.path"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: !!item.exact }"
+            ariaCurrentWhenActive="page"
+          >
+            <span class="icon" aria-hidden="true">{{ item.icon }}</span>{{ item.label }}
+          </a>
+        }
+      }
+    </nav>
+
+    <div class="account">
+      <a routerLink="/perfil" class="who" routerLinkActive="active">
+        <span class="avatar" aria-hidden="true">{{ initials() }}</span>
+        <span class="who-text">
+          <strong>{{ auth.user()?.fullName }}</strong>
+          <span class="muted small">{{ auth.isAdmin() ? 'Administrador' : 'Socio' }}</span>
+        </span>
+      </a>
+      <button type="button" class="btn btn-ghost btn-sm" (click)="auth.logout()">
+        Cerrar sesión
+      </button>
+    </div>
+  </aside>
+
+  <div class="backdrop" (click)="menuOpen.set(false)" aria-hidden="true"></div>
+
+  <div class="main">
+    <header class="topbar">
+      <button
+        type="button"
+        class="btn btn-ghost menu-btn"
+        (click)="menuOpen.set(!menuOpen())"
+        [attr.aria-expanded]="menuOpen()"
+        aria-controls="sidebar"
+      >
+        ☰ <span class="sr-only">Menú</span>
+      </button>
+      <span class="brand-mobile">FitPN</span>
+    </header>
+
+    @if (expiringSoon()) {
+      <div class="alert alert-warning expiring" role="status">
+        Tu suscripción caduca en {{ auth.user()?.daysRemaining }} día(s). Habla con tu entrenador
+        para renovarla y no perder el acceso.
+      </div>
+    }
+
+    <main class="content">
+      <router-outlet />
+    </main>
+  </div>
+</div>

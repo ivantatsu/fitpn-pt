@@ -1,0 +1,11 @@
+# Secretos
+.env
+*.env.local
+
+# Backend
+backend/bin/
+backend/coverage.out
+
+# Editores / SO
+.idea/
+.DS_Store
