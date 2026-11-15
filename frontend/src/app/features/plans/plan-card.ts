@@ -1,6 +1,12 @@
 import { DatePipe } from '@angular/common';
-import { Component, computed, input } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, computed, inject, input, signal } from '@angular/core';
+import { catchError, firstValueFrom, of } from 'rxjs';
+import { userBase } from '../../core/api/training.api';
+import { DEMO_MODE } from '../../core/demo-mode';
 import { Plan, PlanItem } from '../../core/models';
+import { NotificationService } from '../../core/notification.service';
+import { TestResult, summarize } from '../../core/physical-tests';
 import { Pictogram } from '../../shared/pictogram';
 
 /** Muestra un plan agrupado por día. */
@@ -14,9 +20,14 @@ import { Pictogram } from '../../shared/pictogram';
           <h2>{{ plan().title }}</h2>
           <p class="muted small">Actualizado el {{ plan().updatedAt | date: 'd MMM y' }}</p>
         </div>
-        <span class="badge" [class.badge-success]="plan().isActive">{{
-          plan().isActive ? 'Activo' : 'Archivado'
-        }}</span>
+        <div class="row">
+          <span class="badge" [class.badge-success]="plan().isActive">{{
+            plan().isActive ? 'Activo' : 'Archivado'
+          }}</span>
+          <button type="button" class="btn btn-sm" (click)="exportPdf()" [disabled]="exporting()">
+            {{ exporting() ? 'Generando PDF…' : 'Descargar PDF' }}
+          </button>
+        </div>
       </div>
       @if (plan().description) {
         <p class="description">{{ plan().description }}</p>
@@ -79,7 +90,47 @@ import { Pictogram } from '../../shared/pictogram';
   `,
 })
 export class PlanCard {
+  private readonly http = inject(HttpClient);
+  private readonly notify = inject(NotificationService);
+  private readonly demo = inject(DEMO_MODE);
+
   readonly plan = input.required<Plan>();
+  /** Nombre del alumno que aparece en el PDF. */
+  readonly studentName = input('');
+  /** Alumno al que pertenece el plan (vista de instructor); vacío = usuario actual. */
+  readonly userId = input<number | null>(null);
+
+  protected readonly exporting = signal(false);
+
+  /** Genera el PDF del plan (con las mejores marcas del alumno) y lo descarga. */
+  protected async exportPdf(): Promise<void> {
+    this.exporting.set(true);
+    try {
+      const tests = await firstValueFrom(
+        this.http
+          .get<TestResult[]>(`${userBase(this.userId())}/tests`)
+          .pipe(catchError(() => of([] as TestResult[]))),
+      );
+      const { exportPlanPdf } = await import('../../core/pdf/plan-pdf');
+      await exportPlanPdf({
+        plan: this.plan(),
+        studentName: this.studentName() || 'Alumno',
+        marks: summarize(tests),
+      });
+      if (this.demo) {
+        this.notify.info(
+          'PDF generado. Si no se descarga, es porque el visor de la demo bloquea las descargas; en la app instalada se descarga directamente.',
+        );
+      } else {
+        this.notify.success('PDF del plan descargado');
+      }
+    } catch (err) {
+      console.error(err);
+      this.notify.error('No se pudo generar el PDF. Inténtalo de nuevo.');
+    } finally {
+      this.exporting.set(false);
+    }
+  }
 
   protected readonly days = computed(() => {
     const map = new Map<string, PlanItem[]>();

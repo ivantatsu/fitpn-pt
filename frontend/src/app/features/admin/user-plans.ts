@@ -29,7 +29,7 @@ import { PlanEditor } from './plan-editor';
       </div>
       <div class="stack">
         @for (p of plans.value(); track p.id) {
-          <app-plan-card [plan]="p">
+          <app-plan-card [plan]="p" [studentName]="studentName()" [userId]="userId()">
             <div class="row end actions">
               <button type="button" class="btn btn-sm" (click)="editing.set(p)">Editar</button>
               <button type="button" class="btn btn-danger btn-sm" (click)="remove(p)">
@@ -60,6 +60,7 @@ export class UserPlans {
   private readonly notify = inject(NotificationService);
 
   readonly userId = input.required<number>();
+  readonly studentName = input('');
   protected readonly editing = signal<Plan | 'new' | null>(null);
   protected readonly plans = httpResource<Plan[]>(() => `${userBase(this.userId())}/plans`, {
     defaultValue: [],

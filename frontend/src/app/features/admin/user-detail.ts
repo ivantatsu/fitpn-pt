@@ -99,7 +99,7 @@ type TabId = (typeof TABS)[number]['id'];
           <app-workout-list [userId]="u.id" [embedded]="true" />
         }
         @case ('planes') {
-          <app-user-plans [userId]="u.id" />
+          <app-user-plans [userId]="u.id" [studentName]="u.fullName" />
         }
         @case ('progreso') {
           <app-exercise-progress [userId]="u.id" [embedded]="true" />

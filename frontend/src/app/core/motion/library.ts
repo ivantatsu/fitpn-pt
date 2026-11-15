@@ -646,3 +646,10 @@ export function motionFor(name: string, muscleGroup?: string): Motion | null {
   const id = byName?.[1] ?? (muscleGroup ? BY_GROUP[muscleGroup] : undefined);
   return id ? MOTIONS[id] : null;
 }
+
+/** Fase más representativa de cada movimiento para imágenes estáticas (PDF, miniaturas). */
+const KEY_FRAMES: Record<string, number> = { run: 0.17, agility: 0.46, burpee: 0.84, erg: 0.38 };
+
+export function keyFrame(m: Motion): number {
+  return KEY_FRAMES[m.id] ?? 0.5;
+}

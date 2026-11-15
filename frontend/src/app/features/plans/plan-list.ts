@@ -1,5 +1,6 @@
 import { httpResource } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { AuthService } from '../../core/auth/auth.service';
 import { RouterLink } from '@angular/router';
 import { userBase } from '../../core/api/training.api';
 import { Plan } from '../../core/models';
@@ -16,7 +17,7 @@ import { PlanCard } from './plan-card';
     </div>
     <div class="stack">
       @for (p of plans.value(); track p.id) {
-        <app-plan-card [plan]="p" />
+        <app-plan-card [plan]="p" [studentName]="auth.user()?.fullName ?? ''" />
       } @empty {
         <div class="card empty">
           @if (plans.isLoading()) {
@@ -30,6 +31,7 @@ import { PlanCard } from './plan-card';
   `,
 })
 export class PlanList {
+  protected readonly auth = inject(AuthService);
   protected readonly plans = httpResource<Plan[]>(() => `${userBase()}/plans`, {
     defaultValue: [],
   });

@@ -51,7 +51,7 @@ En la interfaz, los socios se llaman **alumnos** y los administradores, **instru
 | **Pruebas físicas**| Registrar marcas del circuito de agilidad (s), dominadas (rep.), suspensión en barra (s) y 1000 m (mm:ss). Muestra la mejor marca, si el último intento mejora al anterior, un gráfico de evolución y el historial. |
 | **Mi panel**       | Estado de la suscripción y días restantes, plan actual, indicadores de 30 días, gráficos y récords. |
 | **Entrenamientos** | Registrar, editar y eliminar sesiones. Puede precargar una sesión a partir de un día de su plan.   |
-| **Mis planes**     | Consultar los planes que le ha asignado su entrenador, agrupados por día.                       |
+| **Mis planes**     | Consultar los planes que le ha asignado su instructor, agrupados por día, y **descargarlos en PDF**. |
 | **Progreso**       | Evolución por ejercicio: 1RM estimado (Epley), peso máximo, volumen y repeticiones.             |
 | **Medidas**        | Peso, % de grasa y perímetro de cintura con su gráfico de evolución.                            |
 | **Mi perfil**      | Ver sus datos y cambiar la contraseña (se cierran sus sesiones en otros dispositivos).          |
@@ -86,6 +86,24 @@ El diseño parte de objetos reales del mundo de la oposición, no de efectos dec
 El emblema es un escudo genérico con una mancuerna, de diseño propio: **no se usa el escudo, la
 placa ni ningún logotipo oficial**. Todos los valores de diseño están en variables CSS en
 `frontend/src/styles.scss`.
+
+### Plan en PDF
+
+Alumnos e instructores pueden descargar cualquier plan en un PDF A4 listo para imprimir. Desde el
+panel del instructor se descarga desde la pestaña «Planes» de la ficha de cada alumno. El PDF
+incluye:
+
+- Cabecera azul marino con franja rojigualda, emblema y título del plan.
+- Ficha con el alumno, la fecha de emisión, el estado y el contenido del plan.
+- Indicaciones del instructor y **mejores marcas actuales** en las pruebas físicas.
+- Cada sesión con sus ejercicios, cada uno con su **pictograma vectorial**, series × repeticiones
+  y descanso, más **casillas para anotar la carga de 4 semanas**.
+- Espacio para observaciones, paginación y pie con aviso de independencia.
+
+Se genera en el navegador con [jsPDF](https://github.com/parallax/jsPDF). La librería y las
+fuentes TTF (Archivo e IBM Plex Mono, licencia OFL, en `frontend/public/fonts/pdf/`) **solo se
+cargan al exportar**, así que no aumentan el tamaño inicial de la app ni la carga del servidor. El
+código está en `frontend/src/app/core/pdf/plan-pdf.ts`.
 
 ### Pictogramas animados
 
