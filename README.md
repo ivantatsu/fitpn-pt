@@ -100,6 +100,15 @@ placa ni ningún logotipo oficial**. Todos los valores de diseño están en vari
   coincide ninguno, por el grupo muscular.
 - Las animaciones solo se ejecutan mientras están visibles y respetan `prefers-reduced-motion`.
 
+Las dos pruebas de velocidad tienen escenas propias para no confundirse:
+
+- **Carrera 1000 m**: zancada de fondo con apoyo, impulso, fase de vuelo y recobro del talón, sobre
+  una pista de tartán con calle y postes de distancia.
+- **Circuito de agilidad**: es una secuencia con salida tumbado boca abajo, levantarse, sprint,
+  paso de valla (pierna de ataque extendida y la de impulso recogida) y slalom entre conos, que se
+  dibujan por delante y por detrás de la figura. Termina volviendo a la posición de salida. Es un
+  esquema ilustrativo: el recorrido exacto está en las bases de cada convocatoria.
+
 Para añadir un movimiento, crea un `Motion` con su función `pose(t)` en `library.ts` y regístralo
 en `MOTIONS`.
 

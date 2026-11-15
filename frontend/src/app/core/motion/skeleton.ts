@@ -9,12 +9,84 @@ export interface Vec {
   y: number;
 }
 
-export type Prop =
+/** Material de la escena. `front` lo dibuja delante de la figura; `light` en tono claro. */
+export type Prop = { front?: boolean; light?: boolean } & (
   | { kind: 'ground' }
   | { kind: 'line'; from: Vec; to: Vec; weight?: number }
   | { kind: 'plate'; at: Vec; r: number }
   | { kind: 'rect'; x: number; y: number; w: number; h: number }
-  | { kind: 'cone'; at: Vec };
+  | { kind: 'cone'; at: Vec }
+  | { kind: 'marker'; at: Vec }
+);
+
+/** Forma SVG lista para pintar (coordenadas ya invertidas en y). */
+export interface Shape {
+  d: string;
+  style: 'ground' | 'stroke' | 'fill' | 'light-stroke' | 'light-fill';
+  width?: number;
+  front: boolean;
+}
+
+const r1 = (n: number) => Math.round(n * 10) / 10;
+
+/** Convierte el material de la escena en trazados SVG. */
+export function propShapes(props: Prop[]): Shape[] {
+  const out: Shape[] = [];
+  for (const p of props) {
+    const front = !!p.front;
+    const stroke = p.light ? 'light-stroke' : 'stroke';
+    const fill = p.light ? 'light-fill' : 'fill';
+    switch (p.kind) {
+      case 'ground':
+        out.push({ d: 'M-62,0H62', style: 'ground', front });
+        break;
+      case 'line':
+        out.push({
+          d: `M${r1(p.from.x)},${r1(-p.from.y)}L${r1(p.to.x)},${r1(-p.to.y)}`,
+          style: stroke,
+          width: p.weight ?? 3,
+          front,
+        });
+        break;
+      case 'plate': {
+        const { x, y } = p.at;
+        out.push({
+          d: `M${r1(x - p.r)},${r1(-y)}a${p.r},${p.r} 0 1,0 ${2 * p.r},0a${p.r},${p.r} 0 1,0 ${-2 * p.r},0`,
+          style: fill,
+          front,
+        });
+        break;
+      }
+      case 'rect':
+        out.push({
+          d: `M${r1(p.x)},${r1(-(p.y + p.h))}h${r1(p.w)}v${r1(p.h)}h${r1(-p.w)}Z`,
+          style: fill,
+          front,
+        });
+        break;
+      case 'cone': {
+        const { x, y } = p.at;
+        out.push({
+          d: `M${r1(x - 5)},${r1(-y)}L${r1(x)},${r1(-y - 15)}L${r1(x + 5)},${r1(-y)}Z`,
+          style: fill,
+          front,
+        });
+        break;
+      }
+      case 'marker': {
+        const { x, y } = p.at;
+        out.push({ d: `M${r1(x)},${r1(-y)}V${r1(-y - 30)}`, style: stroke, width: 2, front });
+        out.push({
+          d: `M${r1(x)},${r1(-y - 30)}h11v8h-11Z`,
+          style: fill,
+          front,
+        });
+        break;
+      }
+    }
+  }
+  return out;
+}
 
 export interface Pose {
   hip: Vec;

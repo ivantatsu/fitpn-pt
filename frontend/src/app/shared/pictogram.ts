@@ -9,7 +9,7 @@ import {
   signal,
 } from '@angular/core';
 import { MOTIONS, Motion, motionFor } from '../core/motion/library';
-import { Vec, rig } from '../core/motion/skeleton';
+import { Vec, propShapes, rig } from '../core/motion/skeleton';
 
 /** Fotogramas por segundo de la animación (suficiente para un pictograma). */
 const FPS = 30;
@@ -29,40 +29,8 @@ const FPS = 30;
         [attr.width]="size()"
         [attr.height]="size()"
       >
-        @for (p of frame().props; track $index) {
-          @switch (p.kind) {
-            @case ('ground') {
-              <line class="ground" x1="-62" y1="0" x2="62" y2="0" />
-            }
-            @case ('line') {
-              <line
-                class="prop"
-                [attr.x1]="p.from.x"
-                [attr.y1]="-p.from.y"
-                [attr.x2]="p.to.x"
-                [attr.y2]="-p.to.y"
-                [attr.stroke-width]="p.weight ?? 3"
-              />
-            }
-            @case ('plate') {
-              <circle class="plate" [attr.cx]="p.at.x" [attr.cy]="-p.at.y" [attr.r]="p.r" />
-            }
-            @case ('rect') {
-              <rect
-                class="prop-fill"
-                [attr.x]="p.x"
-                [attr.y]="-(p.y + p.h)"
-                [attr.width]="p.w"
-                [attr.height]="p.h"
-              />
-            }
-            @case ('cone') {
-              <path
-                class="prop-fill"
-                [attr.d]="'M' + (p.at.x - 5) + ',0 L' + p.at.x + ',-14 L' + (p.at.x + 5) + ',0 Z'"
-              />
-            }
-          }
+        @for (sh of back(); track $index) {
+          <path [attr.d]="sh.d" [attr.class]="sh.style" [attr.stroke-width]="sh.width ?? null" />
         }
         <g class="far">
           <polyline [attr.points]="pts(frame().legs[1])" />
@@ -82,6 +50,9 @@ const FPS = 30;
         </g>
         <polyline [attr.points]="pts(frame().legs[0])" />
         <polyline [attr.points]="pts(frame().arms[0])" />
+        @for (sh of front(); track $index) {
+          <path [attr.d]="sh.d" [attr.class]="sh.style" [attr.stroke-width]="sh.width ?? null" />
+        }
       </svg>
     }
   `,
@@ -92,7 +63,7 @@ const FPS = 30;
       line-height: 0;
     }
     svg {
-      overflow: visible;
+      overflow: hidden;
       max-width: 100%;
       height: auto;
     }
@@ -119,20 +90,26 @@ const FPS = 30;
       stroke-width: 12;
     }
     .ground {
+      fill: none;
       stroke: currentColor;
       stroke-width: 1.5;
       opacity: 0.35;
     }
-    .prop {
+    .stroke {
+      fill: none;
       stroke: var(--prop, currentColor);
       stroke-linecap: round;
     }
-    .plate {
+    .fill {
       fill: var(--prop, currentColor);
     }
-    .prop-fill {
-      fill: var(--prop, currentColor);
-      opacity: 0.85;
+    .light-stroke {
+      fill: none;
+      stroke: var(--prop-light, #fff);
+      stroke-linecap: round;
+    }
+    .light-fill {
+      fill: var(--prop-light, #fff);
     }
   `,
 })
@@ -153,6 +130,10 @@ export class Pictogram {
     const m = this.motion()!;
     return rig(m.pose(this.t() ?? this.phase()));
   });
+
+  private readonly shapes = computed(() => propShapes(this.frame().props));
+  protected readonly back = computed(() => this.shapes().filter((p) => !p.front));
+  protected readonly front = computed(() => this.shapes().filter((p) => p.front));
 
   constructor() {
     const host = inject(ElementRef<HTMLElement>).nativeElement as HTMLElement;
