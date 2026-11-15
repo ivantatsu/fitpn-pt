@@ -60,6 +60,15 @@
       <span class="brand-mobile">FitPN</span>
     </header>
 
+    @if (demo; as d) {
+      <div class="alert alert-info demo-banner" role="note">
+        <span
+          >Demostración con datos de ejemplo. Los cambios solo se guardan en este navegador.</span
+        >
+        <button type="button" class="btn btn-sm" (click)="d.reset()">Restaurar datos</button>
+      </div>
+    }
+
     @if (expiringSoon()) {
       <div class="alert alert-warning expiring" role="status">
         Tu suscripción caduca en {{ auth.user()?.daysRemaining }} día(s). Habla con tu instructor

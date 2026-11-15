@@ -17,6 +17,7 @@ import {
 import { routes } from './app.routes';
 import { authInterceptor } from './core/auth/auth.interceptor';
 import { AuthService } from './core/auth/auth.service';
+import { DEMO_PROVIDERS } from './demo-providers';
 
 registerLocaleData(localeEs);
 
@@ -33,5 +34,6 @@ export const appConfig: ApplicationConfig = {
     ),
     // Recupera la sesión (cookie de refresco) antes de resolver la primera ruta.
     provideAppInitializer(() => inject(AuthService).restoreSession()),
+    ...DEMO_PROVIDERS,
   ],
 };

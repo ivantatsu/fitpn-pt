@@ -183,6 +183,15 @@ nav {
   margin: 1rem 1.5rem 0;
 }
 
+.demo-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin: 1rem 1.5rem 0;
+}
+
 .topbar,
 .backdrop {
   display: none;

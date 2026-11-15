@@ -4,12 +4,14 @@ import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { errorCode, errorMessage } from '../../core/api-error';
 import { AuthService } from '../../core/auth/auth.service';
+import { DEMO_MODE } from '../../core/demo-mode';
 import { BrandMark } from '../../shared/brand-mark';
 
 const REASONS: Record<string, string> = {
   membership_expired: 'Tu suscripción ha caducado. Contacta con tu instructor para renovarla.',
   account_disabled: 'Tu cuenta está deshabilitada. Contacta con tu instructor.',
   session_expired: 'Tu sesión ha caducado. Vuelve a iniciar sesión.',
+  demo_reset: 'Datos de demostración restaurados.',
 };
 
 @Component({
@@ -21,6 +23,7 @@ const REASONS: Record<string, string> = {
 export class Login {
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
+  protected readonly demo = inject(DEMO_MODE);
 
   /** Parámetros de la URL (vinculados por el router). */
   readonly returnUrl = input<string>();
@@ -37,6 +40,11 @@ export class Login {
     const m = this.motivo();
     return m ? (REASONS[m] ?? null) : null;
   });
+
+  protected useDemoAccount(email: string, password: string): void {
+    this.form.setValue({ email, password });
+    void this.submit();
+  }
 
   protected async submit(): Promise<void> {
     if (this.form.invalid) {

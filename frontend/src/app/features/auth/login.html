@@ -63,6 +63,23 @@
       </button>
     </form>
 
+    @if (demo; as d) {
+      <div class="demo-box">
+        <p class="demo-title">Demostración · entra con un clic</p>
+        @for (a of d.accounts; track a.email) {
+          <button
+            type="button"
+            class="btn btn-sm demo-account"
+            (click)="useDemoAccount(a.email, a.password)"
+          >
+            <span>{{ a.label }}</span>
+            <span class="muted small">{{ a.email }}</span>
+          </button>
+        }
+        <p class="muted small">Contraseña de todas las cuentas: <code>demo1234</code></p>
+      </div>
+    }
+
     <p class="muted small help">
       Las altas y renovaciones las gestiona tu instructor. ¿Suscripción caducada? Habla con él.
     </p>

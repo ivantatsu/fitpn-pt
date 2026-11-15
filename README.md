@@ -225,6 +225,22 @@ Abre <http://localhost:8080> y entra con el administrador que configuraste. Desd
 
 ---
 
+## Demo sin servidor
+
+`npm run build:demo` (desde `frontend/`) genera en `dist/fitpn-demo/` una versión de la app que
+funciona **sin backend**:
+
+- La API se simula dentro del navegador con las mismas rutas y reglas (`frontend/src/demo/`).
+- Incluye datos de ejemplo: un instructor y varios alumnos, uno de ellos a punto de caducar y
+  otro caducado.
+- La pantalla de acceso tiene botones para entrar con un clic, y todas las cuentas usan la
+  contraseña `demo1234`.
+- Los cambios se guardan solo en ese navegador y se pueden restaurar desde el aviso superior.
+
+Sirve para enseñar la aplicación alojándola en cualquier hosting estático. Este código **no entra
+en el build normal**: el build `demo` sustituye `src/app/demo-providers.ts` mediante
+`fileReplacements` en `angular.json`.
+
 ## Desarrollo local
 
 Requisitos: **Go 1.27+**, **Node.js 24 LTS** (o 22.22+), npm y Docker (solo para PostgreSQL).

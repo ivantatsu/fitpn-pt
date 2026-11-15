@@ -3,6 +3,7 @@ import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } fro
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter } from 'rxjs';
 import { AuthService } from '../core/auth/auth.service';
+import { DEMO_MODE } from '../core/demo-mode';
 import { BrandMark } from '../shared/brand-mark';
 
 interface NavItem {
@@ -22,6 +23,7 @@ interface NavItem {
 export class Shell {
   protected readonly auth = inject(AuthService);
   protected readonly menuOpen = signal(false);
+  protected readonly demo = inject(DEMO_MODE);
 
   protected readonly trainingNav: NavItem[] = [
     { path: '/panel', label: 'Mi panel', icon: '◎' },
