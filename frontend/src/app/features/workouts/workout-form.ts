@@ -15,13 +15,14 @@ import { EXERCISES_URL, TrainingApi, userBase } from '../../core/api/training.ap
 import { optionalId, toIsoDate } from '../../core/date';
 import { Exercise, Plan, Workout, WorkoutInput } from '../../core/models';
 import { NotificationService } from '../../core/notification.service';
+import { Pictogram } from '../../shared/pictogram';
 
 type SetGroup = FormGroup<{ reps: FormControl<number>; weightKg: FormControl<number> }>;
 
 /** Alta y edición de una sesión de entrenamiento. */
 @Component({
   selector: 'app-workout-form',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, Pictogram],
   templateUrl: './workout-form.html',
   styleUrl: './workout-form.scss',
 })
@@ -33,6 +34,10 @@ export class WorkoutForm {
 
   readonly workoutId = input(null, { transform: optionalId });
   readonly userId = input(null, { transform: optionalId });
+  /** Precarga desde el panel ("Hoy toca"): `?plan=ID&dia=Etiqueta`. */
+  readonly plan = input(null, { transform: optionalId });
+  readonly dia = input<string>();
+  private preloaded = false;
 
   protected readonly isEdit = computed(() => this.workoutId() !== null);
   protected readonly listLink = computed(() =>
@@ -94,6 +99,18 @@ export class WorkoutForm {
       const w = this.existing.value();
       if (w) untracked(() => this.patch(w));
     });
+    effect(() => {
+      const plan = this.plan();
+      const dia = this.dia();
+      const days = this.planDays();
+      if (this.preloaded || !plan || !dia || days.length === 0) return;
+      this.preloaded = true;
+      untracked(() => this.loadPlanDay(`${plan}|${dia}`));
+    });
+  }
+
+  protected exerciseOf(id: number | null | undefined): Exercise | undefined {
+    return id ? this.exercises.value().find((e) => e.id === Number(id)) : undefined;
   }
 
   protected get exerciseArray(): FormArray<FormGroup> {

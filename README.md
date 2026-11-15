@@ -45,6 +45,9 @@ En la interfaz, los socios se llaman **alumnos** y los administradores, **instru
 
 | Sección            | Qué puede hacer                                                                                 |
 | ------------------ | ----------------------------------------------------------------------------------------------- |
+| **Simulacro**      | Cronómetro a pantalla completa con cuenta atrás sonora (3-2-1). En los 1000 m marca el paso cada 200 m y compara cada parcial con el tiempo objetivo. En dominadas cuenta las repeticiones con un botón grande. Mantiene la pantalla encendida (si el navegador lo permite), vibra en cada evento y guarda la marca en el historial. Atajos de teclado: Espacio y V. |
+| **Hoy toca**       | En el panel aparece la siguiente sesión del plan con cada ejercicio animado. «Empezar esta sesión» abre el registro de entrenamiento ya rellenado. |
+| **Ejercicios**     | Biblioteca con la animación y el punto técnico clave de cada ejercicio del catálogo. |
 | **Pruebas físicas**| Registrar marcas del circuito de agilidad (s), dominadas (rep.), suspensión en barra (s) y 1000 m (mm:ss). Muestra la mejor marca, si el último intento mejora al anterior, un gráfico de evolución y el historial. |
 | **Mi panel**       | Estado de la suscripción y días restantes, plan actual, indicadores de 30 días, gráficos y récords. |
 | **Entrenamientos** | Registrar, editar y eliminar sesiones. Puede precargar una sesión a partir de un día de su plan.   |
@@ -66,26 +69,39 @@ Además de todo lo anterior:
 | **Ficha de usuario**    | Pruebas físicas, progreso, entrenamientos, planes (crear y editar), medidas, historial de renovaciones, ajuste manual de la caducidad, bloqueo, restablecer contraseña y baja. |
 | **Ejercicios**          | Mantener el catálogo de ejercicios. Se incluyen 21 de inicio, varios de ellos específicos de las pruebas.       |
 
-### Estética
+### Diseño
 
-El diseño «táctico» toma la esencia de la Policía Nacional sin copiar ningún elemento oficial:
+El diseño parte de objetos reales del mundo de la oposición, no de efectos decorativos:
 
-- **Colores**: azul noche casi negro con una retícula sutil, azul eléctrico como color principal
-  y ámbar reflectante de chaleco en los acentos. Es un único tema oscuro, pensado para usarse en
-  el gimnasio, en la pista y en el móvil.
-- **Tipografía**: titulares enormes en Barlow Condensed gruesa y en cursiva, con el apellido en
-  letra hueca. La fuente va alojada en la propia aplicación, así que respeta la CSP.
-- **Formas**: tarjetas con esquinas en chaflán, botones y pestañas en paralelogramo y bandas
-  diagonales azul, blanco y ámbar, como la rotulación de un vehículo.
-- **Detalles**:
-  - Franja rojigualda en el menú.
-  - Damero azul y blanco en la pantalla de acceso.
-  - Iconos de línea propios.
-  - Contador de «días de acceso» en la credencial del menú y en la ficha del panel.
+- **Hojas de resultados**: cada bloque lleva una banda de cabecera azul marino y las tablas tienen
+  cifras en monoespaciada.
+- **Marcador de cronometraje**: las marcas se muestran en IBM Plex Mono.
+- **Señalética deportiva**: pictogramas animados de cada ejercicio.
+- **Colores**: el azul marino del uniforme en bloques planos sobre papel claro y una franja
+  rojigualda en la cabecera. El amarillo-verde de chaleco reflectante se reserva para lo que está
+  «en marcha» (cronómetro y botón de salida).
+- **Tipografía**: Archivo (variable, con eje de anchura) para los textos e IBM Plex Mono para datos
+  y tiempos. Ambas van alojadas en la propia aplicación.
 
 El emblema es un escudo genérico con una mancuerna, de diseño propio: **no se usa el escudo, la
-placa ni ningún logotipo oficial**, ni la palabra «POLICÍA» como rotulación. Todos los valores
-están en variables CSS en `frontend/src/styles.scss`.
+placa ni ningún logotipo oficial**. Todos los valores de diseño están en variables CSS en
+`frontend/src/styles.scss`.
+
+### Pictogramas animados
+
+`frontend/src/app/core/motion/` contiene un motor propio y ligero, sin dependencias:
+
+- Un esqueleto 2D visto de perfil, con **cinemática inversa** de dos huesos para brazos y piernas.
+  Así las manos se quedan en la barra y los pies en el suelo.
+- 16 movimientos: sentadilla, peso muerto, press banca, press militar, dominadas, suspensión,
+  plancha, zancadas, carrera, circuito de agilidad, fondos, remo, hip thrust, curl, burpee y
+  remoergómetro.
+- Cada ejercicio del catálogo se asocia automáticamente a su animación por el nombre, y si no
+  coincide ninguno, por el grupo muscular.
+- Las animaciones solo se ejecutan mientras están visibles y respetan `prefers-reduced-motion`.
+
+Para añadir un movimiento, crea un `Motion` con su función `pose(t)` en `library.ts` y regístralo
+en `MOTIONS`.
 
 ---
 

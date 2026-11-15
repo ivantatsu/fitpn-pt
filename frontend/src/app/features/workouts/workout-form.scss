@@ -9,10 +9,10 @@
   min-width: 240px;
 }
 .exercise {
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
   padding: 0.9rem;
   background: var(--surface-2);
+  --halo: var(--surface-2);
 }
 .exercise-head {
   display: flex;
@@ -29,10 +29,10 @@
   place-items: center;
   width: 28px;
   height: 28px;
-  border-radius: 50%;
-  background: var(--primary);
-  color: var(--on-primary);
-  font-weight: 700;
+  background: var(--ink);
+  color: #fff;
+  font-family: var(--mono);
+  font-weight: 600;
   font-size: 0.85rem;
 }
 .actions {

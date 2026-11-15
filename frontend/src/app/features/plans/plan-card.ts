@@ -1,11 +1,12 @@
 import { DatePipe } from '@angular/common';
 import { Component, computed, input } from '@angular/core';
 import { Plan, PlanItem } from '../../core/models';
+import { Pictogram } from '../../shared/pictogram';
 
 /** Muestra un plan agrupado por día. */
 @Component({
   selector: 'app-plan-card',
-  imports: [DatePipe],
+  imports: [DatePipe, Pictogram],
   template: `
     <section class="card">
       <div class="page-header compact">
@@ -36,7 +37,12 @@ import { Plan, PlanItem } from '../../core/models';
             <tbody>
               @for (it of day.items; track $index) {
                 <tr>
-                  <td>{{ it.exerciseName }}</td>
+                  <td>
+                    <span class="ex">
+                      <app-pictogram [exercise]="it.exerciseName ?? ''" [size]="44" />
+                      {{ it.exerciseName }}
+                    </span>
+                  </td>
                   <td class="num">{{ it.sets }}</td>
                   <td class="num">{{ it.reps }}</td>
                   <td class="num">{{ it.restSeconds ? it.restSeconds + ' s' : '—' }}</td>
@@ -63,8 +69,12 @@ import { Plan, PlanItem } from '../../core/models';
       white-space: pre-line;
     }
     .day {
-      margin-top: 1rem;
-      color: var(--primary-strong);
+      margin-top: 1.25rem;
+    }
+    .ex {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
     }
   `,
 })

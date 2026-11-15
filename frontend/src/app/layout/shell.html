@@ -1,7 +1,7 @@
 <div class="layout" [class.menu-open]="menuOpen()">
   <aside class="sidebar" id="sidebar">
     <a class="brand" routerLink="/">
-      <app-brand-mark [size]="42" />
+      <app-brand-mark [size]="36" />
       <span class="brand-text">
         <span class="brand-name">FitPN</span>
         <span class="brand-tag">Preparación física</span>
@@ -9,10 +9,9 @@
     </a>
 
     <nav aria-label="Principal">
-      <p class="nav-title">Preparación</p>
       @for (item of trainingNav; track item.path) {
         <a [routerLink]="item.path" routerLinkActive="active" ariaCurrentWhenActive="page">
-          <app-icon [name]="item.icon" [size]="18" />
+          <app-icon [name]="item.icon" [size]="17" />
           <span>{{ item.label }}</span>
         </a>
       }
@@ -26,7 +25,7 @@
             [routerLinkActiveOptions]="{ exact: !!item.exact }"
             ariaCurrentWhenActive="page"
           >
-            <app-icon [name]="item.icon" [size]="18" />
+            <app-icon [name]="item.icon" [size]="17" />
             <span>{{ item.label }}</span>
           </a>
         }
@@ -34,22 +33,21 @@
     </nav>
 
     @if (auth.user(); as u) {
-      <div class="credential">
+      <div class="account">
         <a routerLink="/perfil" class="who" routerLinkActive="active">
-          <span class="avatar" aria-hidden="true">{{ initials() }}</span>
-          <span class="who-text">
-            <strong>{{ u.fullName }}</strong>
-            <span class="role">{{ auth.isAdmin() ? 'Instructor' : 'Alumno' }}</span>
+          <strong>{{ u.fullName }}</strong>
+          <span class="meta">
+            {{ auth.isAdmin() ? 'Instructor' : 'Alumno' }}
+            @if (u.daysRemaining !== null) {
+              ·
+              <span [class.warn]="u.status === 'expiring'"
+                >{{ u.daysRemaining }} días de acceso</span
+              >
+            }
           </span>
         </a>
-        @if (u.daysRemaining !== null) {
-          <div class="access" [class.warn]="u.status === 'expiring'">
-            <span class="access-days">{{ u.daysRemaining }}</span>
-            <span class="access-label">días de acceso</span>
-          </div>
-        }
         <button type="button" class="logout" (click)="auth.logout()">
-          <app-icon name="logout" [size]="16" /> Cerrar sesión
+          <app-icon name="logout" [size]="15" /> Cerrar sesión
         </button>
       </div>
     }
@@ -68,21 +66,19 @@
       >
         <app-icon name="menu" [size]="22" /><span class="sr-only">Menú</span>
       </button>
-      <app-brand-mark [size]="28" />
+      <app-brand-mark [size]="26" />
       <span class="brand-mobile">FitPN</span>
     </header>
 
     @if (demo; as d) {
-      <div class="alert alert-info notice" role="note">
-        <span
-          >Demostración con datos de ejemplo. Los cambios solo se guardan en este navegador.</span
-        >
+      <div class="notice demo" role="note">
+        <span>Demo con datos de ejemplo. Los cambios solo se guardan en este navegador.</span>
         <button type="button" class="btn btn-sm" (click)="d.reset()">Restaurar datos</button>
       </div>
     }
 
     @if (expiringSoon()) {
-      <div class="alert alert-warning notice" role="status">
+      <div class="notice alert-warning" role="status">
         Tu suscripción caduca en {{ auth.user()?.daysRemaining }} día(s). Habla con tu instructor
         para renovarla y no perder el acceso.
       </div>

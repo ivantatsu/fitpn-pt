@@ -37,14 +37,14 @@ import { NotificationService } from '../core/notification.service';
       justify-content: space-between;
       gap: 0.75rem;
       padding: 0.75rem 1rem;
-      background: var(--navy-800);
-      border: 1px solid var(--border-strong);
-      border-left: 4px solid var(--info);
-      box-shadow: 0 10px 30px rgb(0 0 0 / 45%);
-      font-weight: 600;
+      background: var(--ink);
+      color: #fff;
+      border-left: 4px solid var(--on-navy-muted);
+      box-shadow: 0 8px 24px rgb(13 23 38 / 25%);
+      font-weight: 500;
     }
     .toast-success {
-      border-left-color: var(--primary);
+      border-left-color: var(--hivis);
     }
     .toast-error {
       border-left-color: var(--danger);
@@ -52,7 +52,7 @@ import { NotificationService } from '../core/notification.service';
     .close {
       border: none;
       background: none;
-      color: var(--text-muted);
+      color: var(--on-navy-muted);
       font-size: 1.25rem;
       cursor: pointer;
     }

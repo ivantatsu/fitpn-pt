@@ -26,6 +26,17 @@ export const routes: Routes = [
         loadComponent: () => import('./features/dashboard/dashboard').then((m) => m.Dashboard),
       },
       {
+        path: 'simulacro',
+        title: 'Simulacro · FitPN',
+        loadComponent: () => import('./features/simulator/simulator').then((m) => m.Simulator),
+      },
+      {
+        path: 'ejercicios',
+        title: 'Ejercicios · FitPN',
+        loadComponent: () =>
+          import('./features/library/exercise-library').then((m) => m.ExerciseLibrary),
+      },
+      {
         path: 'pruebas',
         title: 'Pruebas físicas · FitPN',
         loadComponent: () => import('./features/tests/physical-tests').then((m) => m.PhysicalTests),

@@ -1,11 +1,12 @@
 import { DatePipe } from '@angular/common';
 import { Component, input, output } from '@angular/core';
 import { formatResult, TestSummary, TestType } from '../../core/physical-tests';
+import { Pictogram } from '../../shared/pictogram';
 
 /** Tarjetas con la mejor marca y la tendencia de cada prueba. */
 @Component({
   selector: 'app-test-cards',
-  imports: [DatePipe],
+  imports: [DatePipe, Pictogram],
   template: `
     <div class="grid cards">
       @for (s of summaries(); track s.def.type) {
@@ -17,7 +18,10 @@ import { formatResult, TestSummary, TestType } from '../../core/physical-tests';
           [disabled]="!selectable()"
           (click)="select.emit(s.def.type)"
         >
-          <span class="name">{{ s.def.name }}</span>
+          <span class="head">
+            <span class="name">{{ s.def.name }}</span>
+            <app-pictogram [exercise]="motionOf(s.def.type)" [size]="54" [phase]="0.4" />
+          </span>
           @if (s.best; as b) {
             <span class="best">{{ fmt(s.def.type, b.result) }}</span>
             <span class="muted small">Mejor marca · {{ b.performedOn | date: 'd MMM y' }}</span>
@@ -43,63 +47,67 @@ import { formatResult, TestSummary, TestType } from '../../core/physical-tests';
   `,
   styles: `
     .cards {
-      --min: 210px;
+      --min: 200px;
+      gap: 0;
+      background: var(--surface);
+      border: 1px solid var(--line);
     }
     .test {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      gap: 0.25rem;
-      padding-top: 1.1rem;
+      gap: 0.2rem;
+      padding: 0.9rem 1rem 1rem;
+      border: 0;
+      border-right: 1px solid var(--line);
+      border-top: 3px solid transparent;
+      background: none;
       text-align: left;
       font: inherit;
       color: inherit;
       cursor: pointer;
-      border-top: 2px solid var(--border-strong);
-      transition:
-        border-color 0.15s,
-        background 0.15s;
-    }
-    .test:not(:disabled):hover {
-      border-top-color: var(--primary);
     }
     .test:disabled {
       cursor: default;
     }
+    .test:not(:disabled):hover {
+      background: var(--surface-2);
+    }
     .test.selected {
-      border-top-color: var(--amber);
-      background: linear-gradient(180deg, rgb(47 107 255 / 22%), var(--surface) 160px);
+      border-top-color: var(--ink);
+      background: var(--surface-2);
+    }
+    .head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      width: 100%;
     }
     .name {
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 0.16em;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 600;
       text-transform: uppercase;
+      letter-spacing: 0.04em;
       color: var(--text-muted);
     }
     .best {
-      font-family: var(--font-display);
-      font-size: 3.1rem;
-      font-weight: 800;
-      font-style: italic;
-      line-height: 0.95;
+      font-family: var(--mono);
+      font-size: 2.5rem;
+      font-weight: 600;
+      line-height: 1;
+      letter-spacing: -0.04em;
       font-variant-numeric: tabular-nums;
     }
     .trend {
-      padding: 0.1rem 0.5rem;
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      background: var(--surface-3);
+      font-size: 0.8rem;
+      font-weight: 600;
     }
     .up {
       color: var(--success);
-      background: var(--success-soft);
     }
     .down {
       color: var(--danger);
-      background: var(--danger-soft);
     }
   `,
 })
@@ -108,6 +116,12 @@ export class TestCards {
   readonly selected = input<TestType | null>(null);
   readonly selectable = input(true);
   readonly select = output<TestType>();
+
+  protected motionOf(type: TestType): string {
+    return { agility_circuit: 'agility', pull_ups: 'pullup', bar_hang: 'hang', run_1000m: 'run' }[
+      type
+    ];
+  }
 
   protected fmt(type: TestType, v: number): string {
     return formatResult(type, v);

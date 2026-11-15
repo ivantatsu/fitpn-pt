@@ -1,0 +1,199 @@
+.tabs button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Marcador: bloque azul marino; el amarillo-verde solo aparece en marcha. */
+.board {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 2rem;
+  padding: 2rem clamp(1.25rem, 4vw, 3rem);
+  background: var(--navy);
+  color: #fff;
+  --halo: var(--navy);
+  --prop: var(--on-navy-muted);
+}
+
+.figure app-pictogram {
+  color: #fff;
+}
+
+.status {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: var(--on-navy-muted);
+}
+
+.readout {
+  margin: 0.25rem 0 1.25rem;
+  font-family: var(--mono);
+  font-size: clamp(4.5rem, 13vw, 9.5rem);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+.unit {
+  margin-left: 0.15em;
+  font-size: 0.3em;
+  letter-spacing: 0;
+  color: var(--on-navy-muted);
+}
+
+.live .readout,
+.countdown {
+  color: var(--hivis);
+}
+
+.done .readout {
+  color: #fff;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.big {
+  min-width: 200px;
+  min-height: 72px;
+  padding: 0 2rem;
+  border: 0;
+  font: inherit;
+  font-size: 1.5rem;
+  font-weight: 800;
+  font-stretch: 115%;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.go {
+  background: var(--hivis);
+  color: var(--ink);
+
+  &:hover {
+    background: #fff;
+  }
+}
+
+.stop {
+  background: #fff;
+  color: var(--ink);
+
+  &:hover {
+    background: var(--hivis);
+  }
+}
+
+.small-btn {
+  min-height: 48px;
+  padding: 0 1.1rem;
+  border: 1px solid rgb(255 255 255 / 45%);
+  background: transparent;
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--navy-2);
+  }
+}
+
+@media (hover: none) {
+  .hint {
+    display: none;
+  }
+}
+
+.hint {
+  margin: 1rem 0 0;
+  font-size: 0.8rem;
+  color: var(--on-navy-muted);
+}
+
+kbd {
+  padding: 0.05rem 0.35rem;
+  border: 1px solid currentColor;
+  font-family: var(--mono);
+  font-size: 0.85em;
+}
+
+.save,
+.pace {
+  margin-top: 1.25rem;
+}
+
+.save-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 1rem;
+}
+
+.final {
+  margin: 0;
+
+  strong {
+    font-family: var(--mono);
+    font-size: 1.2rem;
+  }
+}
+
+.pace-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 1rem;
+  margin-bottom: 1rem;
+
+  p {
+    flex: 1 1 260px;
+    margin: 0;
+  }
+}
+
+.target {
+  width: 140px;
+
+  .input {
+    font-family: var(--mono);
+    font-size: 1.2rem;
+  }
+}
+
+.ahead {
+  color: var(--success);
+  font-weight: 600;
+}
+
+.behind {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+@media (max-width: 720px) {
+  .board {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    padding: 1.25rem;
+  }
+
+  .figure app-pictogram {
+    width: 110px;
+  }
+
+  .big {
+    flex: 1 1 100%;
+  }
+
+  .save-row {
+    grid-template-columns: 1fr;
+  }
+}

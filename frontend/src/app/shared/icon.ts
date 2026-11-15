@@ -14,6 +14,9 @@ const PATHS: Record<string, string> = {
   command: 'M12 2l9 4v6c0 5-4 9-9 10-5-1-9-5-9-10V6zM8 12l3 3 5-6',
   logout: 'M15 4h4v16h-4M10 8l-4 4 4 4M6 12h11',
   menu: 'M3 6h18M3 12h18M3 18h12',
+  target: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM12 12h.01',
+  figure: 'M12 5a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM12 7v7M12 14l-4 8M12 14l4 8M5 9l7-2 7 2',
+  play: 'M7 4l13 8-13 8z',
 };
 
 /** Icono de línea propio (sin dependencias). */

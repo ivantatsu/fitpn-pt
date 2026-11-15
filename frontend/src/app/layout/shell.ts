@@ -28,17 +28,19 @@ export class Shell {
 
   protected readonly trainingNav: NavItem[] = [
     { path: '/panel', label: 'Mi panel', icon: 'panel' },
-    { path: '/pruebas', label: 'Pruebas físicas', icon: 'stopwatch' },
+    { path: '/simulacro', label: 'Simulacro', icon: 'stopwatch' },
+    { path: '/pruebas', label: 'Pruebas físicas', icon: 'target' },
     { path: '/entrenamientos', label: 'Entrenamientos', icon: 'dumbbell' },
     { path: '/planes', label: 'Mis planes', icon: 'plan' },
+    { path: '/ejercicios', label: 'Ejercicios', icon: 'figure' },
     { path: '/progreso', label: 'Progreso', icon: 'trend' },
     { path: '/medidas', label: 'Medidas', icon: 'scale' },
   ];
 
   protected readonly adminNav: NavItem[] = [
-    { path: '/admin', label: 'Centro de mando', icon: 'command', exact: true },
+    { path: '/admin', label: 'Resumen', icon: 'command', exact: true },
     { path: '/admin/usuarios', label: 'Alumnos', icon: 'users' },
-    { path: '/admin/ejercicios', label: 'Ejercicios', icon: 'catalog' },
+    { path: '/admin/ejercicios', label: 'Catálogo', icon: 'catalog' },
   ];
 
   protected readonly initials = computed(() =>

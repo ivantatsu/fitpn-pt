@@ -1,0 +1,177 @@
+<div class="page-header">
+  <div>
+    <h1>Simulacro</h1>
+    <p class="muted">
+      Cronometra la prueba como el día del examen y guarda la marca en tu historial.
+    </p>
+  </div>
+  <a routerLink="/pruebas" class="btn btn-sm">Ver mis marcas</a>
+</div>
+
+<div class="tabs" role="tablist" aria-label="Prueba">
+  @for (d of defs; track d.type) {
+    <button
+      type="button"
+      role="tab"
+      [attr.aria-selected]="test() === d.type"
+      [disabled]="phase() === 'running' || phase() === 'countdown'"
+      (click)="selectTest(d.type)"
+    >
+      {{ d.name }}
+    </button>
+  }
+</div>
+
+<section class="board" [class.live]="phase() === 'running'" [class.done]="phase() === 'done'">
+  <div class="figure">
+    <app-pictogram [exercise]="motion()" [size]="180" />
+  </div>
+
+  <div class="clock">
+    <p class="status" aria-live="polite">
+      @switch (phase()) {
+        @case ('ready') {
+          {{ isCounter() ? 'Preparado · cuenta cada repetición válida' : 'Preparado' }}
+        }
+        @case ('countdown') {
+          Atención…
+        }
+        @case ('running') {
+          {{ isCounter() ? 'En marcha · pulsa +1 en cada repetición' : 'En marcha' }}
+        }
+        @case ('done') {
+          Marca final
+        }
+      }
+    </p>
+
+    @if (phase() === 'countdown') {
+      <p class="readout countdown">{{ countdown() }}</p>
+    } @else {
+      <p class="readout" [attr.aria-label]="'Marca: ' + readout()">
+        {{ readout()
+        }}<span class="unit">{{ isCounter() ? 'rep.' : test() === 'run_1000m' ? '' : 's' }}</span>
+      </p>
+    }
+
+    <div class="controls">
+      @switch (phase()) {
+        @case ('ready') {
+          <button type="button" class="big go" (click)="start()">
+            {{ isCounter() ? 'Empezar' : 'Salida' }}
+          </button>
+        }
+        @case ('countdown') {
+          <button type="button" class="big stop" (click)="stop()">Cancelar</button>
+        }
+        @case ('running') {
+          @if (isCounter()) {
+            <button type="button" class="big go" (click)="addRep(1)">+1</button>
+            <button type="button" class="small-btn" (click)="addRep(-1)">−1</button>
+            <button type="button" class="small-btn" (click)="stop()">Terminar</button>
+          } @else {
+            <button type="button" class="big stop" (click)="stop()">Parar</button>
+            @if (test() === 'run_1000m') {
+              <button type="button" class="small-btn" (click)="lap()">
+                Paso por {{ (laps().length + 1) * 200 }} m
+              </button>
+            }
+          }
+        }
+        @case ('done') {
+          <button type="button" class="small-btn" (click)="reset()">Repetir</button>
+        }
+      }
+    </div>
+    <p class="hint">
+      Teclado: <kbd>Espacio</kbd> {{ isCounter() ? 'empieza y suma' : 'sale y para' }}
+      @if (test() === 'run_1000m') {
+        · <kbd>V</kbd> marca el paso cada 200 m
+      }
+    </p>
+  </div>
+</section>
+
+@if (phase() === 'done') {
+  <section class="card save">
+    <h2>Guardar resultado</h2>
+    <div class="save-row">
+      <p class="final">
+        {{ def().name }}:
+        <strong
+          >{{ readout() }}{{ isCounter() ? ' rep.' : test() === 'run_1000m' ? '' : ' s' }}</strong
+        >
+      </p>
+      <input
+        class="input"
+        aria-label="Notas"
+        placeholder="Notas: pista, condiciones, sensaciones…"
+        [ngModel]="notes()"
+        (ngModelChange)="notes.set($event)"
+      />
+      @if (saved()) {
+        <a class="btn" routerLink="/pruebas">Ver evolución</a>
+      } @else {
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="save()"
+          [disabled]="saving() || result() <= 0"
+        >
+          Guardar en mi historial
+        </button>
+      }
+    </div>
+  </section>
+}
+
+@if (test() === 'run_1000m') {
+  <section class="card pace">
+    <h2>Parciales objetivo · 1000 m</h2>
+    <div class="pace-head">
+      <label class="field target">
+        <span class="label">Tiempo objetivo</span>
+        <input
+          class="input"
+          inputmode="decimal"
+          placeholder="3:40"
+          [ngModel]="target()"
+          (ngModelChange)="target.set($event)"
+          [disabled]="phase() === 'running'"
+        />
+      </label>
+      <p class="muted small">
+        Marca el paso cada 200 m (botón o tecla <kbd>V</kbd>) y compara con el ritmo objetivo. El
+        último paso detiene el cronómetro.
+      </p>
+    </div>
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Paso</th>
+            <th class="num">Objetivo</th>
+            <th class="num">Real</th>
+            <th class="num">Diferencia</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (s of splits(); track s.distance) {
+            <tr>
+              <td>{{ s.distance }}</td>
+              <td class="num">{{ s.goal }}</td>
+              <td class="num">{{ s.real }}</td>
+              <td
+                class="num"
+                [class.ahead]="s.delta !== null && s.delta <= 0"
+                [class.behind]="s.delta !== null && s.delta > 0"
+              >
+                {{ s.delta !== null ? deltaText(s.delta) : '—' }}
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+}

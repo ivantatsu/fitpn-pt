@@ -75,6 +75,9 @@
         <div class="exercise" [formGroupName]="i">
           <div class="exercise-head">
             <span class="index">{{ i + 1 }}</span>
+            @if (exerciseOf(ex.get('exerciseId')?.value); as e) {
+              <app-pictogram [exercise]="e.name" [muscleGroup]="e.muscleGroup" [size]="64" />
+            }
             <select
               class="input"
               formControlName="exerciseId"
