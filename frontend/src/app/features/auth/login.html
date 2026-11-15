@@ -1,24 +1,29 @@
 <div class="login-page">
   <section class="hero" aria-hidden="true">
+    <div class="livery"></div>
     <div class="hero-inner">
-      <app-brand-mark [size]="72" />
-      <p class="eyebrow">Oposición · Policía Nacional</p>
-      <h2>Preparación física<br />para superar las pruebas</h2>
-      <ul>
-        <li>Circuito de agilidad</li>
-        <li>Dominadas · Suspensión en barra</li>
-        <li>Carrera de 1000 metros</li>
+      <div class="hero-brand">
+        <app-brand-mark [size]="56" />
+        <span class="eyebrow">Oposición · Policía Nacional</span>
+      </div>
+      <p class="motto">
+        <span class="outline">Entrena.</span>
+        <span>Supera.</span>
+        <span class="accent">Aprueba.</span>
+      </p>
+      <ul class="tests">
+        <li><app-icon name="stopwatch" [size]="18" /> Circuito de agilidad</li>
+        <li><app-icon name="dumbbell" [size]="18" /> Dominadas · Suspensión</li>
+        <li><app-icon name="trend" [size]="18" /> Carrera 1000 m</li>
       </ul>
     </div>
+    <div class="checker"></div>
   </section>
 
   <section class="panel">
     <div class="brand">
-      <app-brand-mark [size]="48" />
-      <div>
-        <h1>FitPN</h1>
-        <p class="muted">Acceso de alumnos e instructores</p>
-      </div>
+      <h1>Acceso</h1>
+      <p class="muted">Alumnos e instructores de FitPN</p>
     </div>
 
     @if (notice() && !error()) {
@@ -58,7 +63,7 @@
         }
       </div>
 
-      <button class="btn btn-primary" type="submit" [disabled]="submitting()">
+      <button class="btn btn-primary submit" type="submit" [disabled]="submitting()">
         {{ submitting() ? 'Entrando…' : 'Entrar' }}
       </button>
     </form>
@@ -67,11 +72,7 @@
       <div class="demo-box">
         <p class="demo-title">Demostración · entra con un clic</p>
         @for (a of d.accounts; track a.email) {
-          <button
-            type="button"
-            class="btn btn-sm demo-account"
-            (click)="useDemoAccount(a.email, a.password)"
-          >
+          <button type="button" class="demo-account" (click)="useDemoAccount(a.email, a.password)">
             <span>{{ a.label }}</span>
             <span class="muted small">{{ a.email }}</span>
           </button>

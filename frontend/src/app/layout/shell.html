@@ -1,7 +1,7 @@
 <div class="layout" [class.menu-open]="menuOpen()">
   <aside class="sidebar" id="sidebar">
     <a class="brand" routerLink="/">
-      <app-brand-mark [size]="40" />
+      <app-brand-mark [size]="42" />
       <span class="brand-text">
         <span class="brand-name">FitPN</span>
         <span class="brand-tag">Preparación física</span>
@@ -12,12 +12,13 @@
       <p class="nav-title">Preparación</p>
       @for (item of trainingNav; track item.path) {
         <a [routerLink]="item.path" routerLinkActive="active" ariaCurrentWhenActive="page">
-          <span class="icon" aria-hidden="true">{{ item.icon }}</span>{{ item.label }}
+          <app-icon [name]="item.icon" [size]="18" />
+          <span>{{ item.label }}</span>
         </a>
       }
 
       @if (auth.isAdmin()) {
-        <p class="nav-title">Mando · Administración</p>
+        <p class="nav-title">Instructor</p>
         @for (item of adminNav; track item.path) {
           <a
             [routerLink]="item.path"
@@ -25,22 +26,33 @@
             [routerLinkActiveOptions]="{ exact: !!item.exact }"
             ariaCurrentWhenActive="page"
           >
-            <span class="icon" aria-hidden="true">{{ item.icon }}</span>{{ item.label }}
+            <app-icon [name]="item.icon" [size]="18" />
+            <span>{{ item.label }}</span>
           </a>
         }
       }
     </nav>
 
-    <div class="account">
-      <a routerLink="/perfil" class="who" routerLinkActive="active">
-        <span class="avatar" aria-hidden="true">{{ initials() }}</span>
-        <span class="who-text">
-          <strong>{{ auth.user()?.fullName }}</strong>
-          <span class="role">{{ auth.isAdmin() ? 'Instructor · Admin' : 'Alumno' }}</span>
-        </span>
-      </a>
-      <button type="button" class="btn btn-sm logout" (click)="auth.logout()">Cerrar sesión</button>
-    </div>
+    @if (auth.user(); as u) {
+      <div class="credential">
+        <a routerLink="/perfil" class="who" routerLinkActive="active">
+          <span class="avatar" aria-hidden="true">{{ initials() }}</span>
+          <span class="who-text">
+            <strong>{{ u.fullName }}</strong>
+            <span class="role">{{ auth.isAdmin() ? 'Instructor' : 'Alumno' }}</span>
+          </span>
+        </a>
+        @if (u.daysRemaining !== null) {
+          <div class="access" [class.warn]="u.status === 'expiring'">
+            <span class="access-days">{{ u.daysRemaining }}</span>
+            <span class="access-label">días de acceso</span>
+          </div>
+        }
+        <button type="button" class="logout" (click)="auth.logout()">
+          <app-icon name="logout" [size]="16" /> Cerrar sesión
+        </button>
+      </div>
+    }
   </aside>
 
   <div class="backdrop" (click)="menuOpen.set(false)" aria-hidden="true"></div>
@@ -49,19 +61,19 @@
     <header class="topbar">
       <button
         type="button"
-        class="btn btn-ghost menu-btn"
+        class="menu-btn"
         (click)="menuOpen.set(!menuOpen())"
         [attr.aria-expanded]="menuOpen()"
         aria-controls="sidebar"
       >
-        ☰ <span class="sr-only">Menú</span>
+        <app-icon name="menu" [size]="22" /><span class="sr-only">Menú</span>
       </button>
       <app-brand-mark [size]="28" />
       <span class="brand-mobile">FitPN</span>
     </header>
 
     @if (demo; as d) {
-      <div class="alert alert-info demo-banner" role="note">
+      <div class="alert alert-info notice" role="note">
         <span
           >Demostración con datos de ejemplo. Los cambios solo se guardan en este navegador.</span
         >
@@ -70,7 +82,7 @@
     }
 
     @if (expiringSoon()) {
-      <div class="alert alert-warning expiring" role="status">
+      <div class="alert alert-warning notice" role="status">
         Tu suscripción caduca en {{ auth.user()?.daysRemaining }} día(s). Habla con tu instructor
         para renovarla y no perder el acceso.
       </div>

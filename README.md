@@ -68,16 +68,24 @@ Además de todo lo anterior:
 
 ### Estética
 
-La identidad visual se inspira en el azul marino institucional y en la bandera de España:
+El diseño «táctico» toma la esencia de la Policía Nacional sin copiar ningún elemento oficial:
 
-- Barra lateral azul marino con una franja rojigualda.
-- Acentos dorados.
-- Titulares en tipografía condensada (Barlow Condensed, alojada en la propia aplicación, así que
-  no necesita un CDN y respeta la CSP).
+- **Colores**: azul noche casi negro con una retícula sutil, azul eléctrico como color principal
+  y ámbar reflectante de chaleco en los acentos. Es un único tema oscuro, pensado para usarse en
+  el gimnasio, en la pista y en el móvil.
+- **Tipografía**: titulares enormes en Barlow Condensed gruesa y en cursiva, con el apellido en
+  letra hueca. La fuente va alojada en la propia aplicación, así que respeta la CSP.
+- **Formas**: tarjetas con esquinas en chaflán, botones y pestañas en paralelogramo y bandas
+  diagonales azul, blanco y ámbar, como la rotulación de un vehículo.
+- **Detalles**:
+  - Franja rojigualda en el menú.
+  - Damero azul y blanco en la pantalla de acceso.
+  - Iconos de línea propios.
+  - Contador de «días de acceso» en la credencial del menú y en la ficha del panel.
 
-El emblema es un escudo genérico con una mancuerna, de diseño propio: **no se usa el escudo ni
-ningún logotipo oficial** de la Policía Nacional. Todos los colores están en variables CSS en
-`frontend/src/styles.scss`, así que se pueden ajustar fácilmente, y hay modo oscuro automático.
+El emblema es un escudo genérico con una mancuerna, de diseño propio: **no se usa el escudo, la
+placa ni ningún logotipo oficial**, ni la palabra «POLICÍA» como rotulación. Todos los valores
+están en variables CSS en `frontend/src/styles.scss`.
 
 ---
 

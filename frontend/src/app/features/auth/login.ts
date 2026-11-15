@@ -6,6 +6,7 @@ import { errorCode, errorMessage } from '../../core/api-error';
 import { AuthService } from '../../core/auth/auth.service';
 import { DEMO_MODE } from '../../core/demo-mode';
 import { BrandMark } from '../../shared/brand-mark';
+import { Icon } from '../../shared/icon';
 
 const REASONS: Record<string, string> = {
   membership_expired: 'Tu suscripción ha caducado. Contacta con tu instructor para renovarla.',
@@ -16,7 +17,7 @@ const REASONS: Record<string, string> = {
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, BrandMark],
+  imports: [ReactiveFormsModule, BrandMark, Icon],
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })

@@ -5,6 +5,7 @@ import { filter } from 'rxjs';
 import { AuthService } from '../core/auth/auth.service';
 import { DEMO_MODE } from '../core/demo-mode';
 import { BrandMark } from '../shared/brand-mark';
+import { Icon } from '../shared/icon';
 
 interface NavItem {
   path: string;
@@ -16,7 +17,7 @@ interface NavItem {
 /** Estructura principal: barra lateral de navegación + contenido. */
 @Component({
   selector: 'app-shell',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, BrandMark],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, BrandMark, Icon],
   templateUrl: './shell.html',
   styleUrl: './shell.scss',
 })
@@ -26,18 +27,18 @@ export class Shell {
   protected readonly demo = inject(DEMO_MODE);
 
   protected readonly trainingNav: NavItem[] = [
-    { path: '/panel', label: 'Mi panel', icon: '◎' },
-    { path: '/pruebas', label: 'Pruebas físicas', icon: '⏱' },
-    { path: '/entrenamientos', label: 'Entrenamientos', icon: '🏋' },
-    { path: '/planes', label: 'Mis planes', icon: '☰' },
-    { path: '/progreso', label: 'Progreso', icon: '↗' },
-    { path: '/medidas', label: 'Medidas', icon: '⚖' },
+    { path: '/panel', label: 'Mi panel', icon: 'panel' },
+    { path: '/pruebas', label: 'Pruebas físicas', icon: 'stopwatch' },
+    { path: '/entrenamientos', label: 'Entrenamientos', icon: 'dumbbell' },
+    { path: '/planes', label: 'Mis planes', icon: 'plan' },
+    { path: '/progreso', label: 'Progreso', icon: 'trend' },
+    { path: '/medidas', label: 'Medidas', icon: 'scale' },
   ];
 
   protected readonly adminNav: NavItem[] = [
-    { path: '/admin', label: 'Resumen', icon: '▦', exact: true },
-    { path: '/admin/usuarios', label: 'Alumnos y usuarios', icon: '👥' },
-    { path: '/admin/ejercicios', label: 'Ejercicios', icon: '✚' },
+    { path: '/admin', label: 'Centro de mando', icon: 'command', exact: true },
+    { path: '/admin/usuarios', label: 'Alumnos', icon: 'users' },
+    { path: '/admin/ejercicios', label: 'Ejercicios', icon: 'catalog' },
   ];
 
   protected readonly initials = computed(() =>

@@ -24,11 +24,11 @@ import { formatResult, TestSummary, TestType } from '../../core/physical-tests';
             @if (s.improvement !== null) {
               <span class="trend" [class.up]="s.improvement > 0" [class.down]="s.improvement < 0">
                 @if (s.improvement > 0) {
-                  ▲ Mejora en el último intento
+                  ▲ Mejora vs. anterior
                 } @else if (s.improvement < 0) {
-                  ▼ Peor que el intento anterior
+                  ▼ Empeora vs. anterior
                 } @else {
-                  = Igual que el intento anterior
+                  = Igual que el anterior
                 }
               </span>
             }
@@ -43,48 +43,63 @@ import { formatResult, TestSummary, TestType } from '../../core/physical-tests';
   `,
   styles: `
     .cards {
-      --min: 200px;
+      --min: 210px;
     }
     .test {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      gap: 0.2rem;
+      gap: 0.25rem;
+      padding-top: 1.1rem;
       text-align: left;
       font: inherit;
       color: inherit;
       cursor: pointer;
-      border-top: 3px solid var(--primary);
+      border-top: 2px solid var(--border-strong);
+      transition:
+        border-color 0.15s,
+        background 0.15s;
+    }
+    .test:not(:disabled):hover {
+      border-top-color: var(--primary);
     }
     .test:disabled {
       cursor: default;
     }
     .test.selected {
-      outline: 2px solid var(--primary);
-      border-top-color: var(--gold);
+      border-top-color: var(--amber);
+      background: linear-gradient(180deg, rgb(47 107 255 / 22%), var(--surface) 160px);
     }
     .name {
-      font-size: 0.78rem;
+      font-size: 0.7rem;
       font-weight: 700;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
       color: var(--text-muted);
     }
     .best {
       font-family: var(--font-display);
-      font-size: 2.2rem;
-      font-weight: 700;
-      line-height: 1.1;
+      font-size: 3.1rem;
+      font-weight: 800;
+      font-style: italic;
+      line-height: 0.95;
+      font-variant-numeric: tabular-nums;
     }
     .trend {
-      font-size: 0.8rem;
-      font-weight: 600;
+      padding: 0.1rem 0.5rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      background: var(--surface-3);
     }
     .up {
       color: var(--success);
+      background: var(--success-soft);
     }
     .down {
       color: var(--danger);
+      background: var(--danger-soft);
     }
   `,
 })

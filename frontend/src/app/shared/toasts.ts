@@ -37,11 +37,11 @@ import { NotificationService } from '../core/notification.service';
       justify-content: space-between;
       gap: 0.75rem;
       padding: 0.75rem 1rem;
-      border-radius: var(--radius-sm);
-      background: var(--surface);
-      border: 1px solid var(--border);
+      background: var(--navy-800);
+      border: 1px solid var(--border-strong);
       border-left: 4px solid var(--info);
-      box-shadow: 0 6px 20px rgb(0 0 0 / 15%);
+      box-shadow: 0 10px 30px rgb(0 0 0 / 45%);
+      font-weight: 600;
     }
     .toast-success {
       border-left-color: var(--primary);

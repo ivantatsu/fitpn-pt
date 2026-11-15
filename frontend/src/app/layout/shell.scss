@@ -10,32 +10,26 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  padding: 1.4rem 0.9rem 1.1rem;
-  background: linear-gradient(180deg, var(--navy-800), var(--navy-900));
-  color: var(--on-navy);
+  gap: 1.25rem;
+  padding: 1.5rem 1rem 1.1rem 1.35rem;
+  background: rgb(2 6 13 / 92%);
+  border-right: 1px solid var(--border);
   overflow-y: auto;
 
-  /* Franja rojigualda superior */
+  /* Franja rojigualda vertical */
   &::before {
     content: '';
     position: absolute;
-    inset: 0 0 auto 0;
-    height: 6px;
-    background: linear-gradient(
-      90deg,
-      var(--flag-red) 0 25%,
-      var(--flag-yellow) 25% 75%,
-      var(--flag-red) 75% 100%
-    );
+    inset: 0 auto 0 0;
+    width: 5px;
+    background: var(--flag-stripe);
   }
 }
 
 .brand {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
-  padding: 0 0.4rem;
+  gap: 0.7rem;
   color: #fff;
   text-decoration: none;
 }
@@ -43,89 +37,96 @@
 .brand-text {
   display: flex;
   flex-direction: column;
-  line-height: 1.05;
+  line-height: 0.95;
 }
 
 .brand-name {
   font-family: var(--font-display);
-  font-size: 1.6rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
+  font-size: 1.9rem;
+  font-weight: 800;
+  font-style: italic;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
 
 .brand-tag {
-  font-size: 0.68rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
+  margin-top: 0.2rem;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--gold);
+  color: var(--amber);
 }
 
 nav {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
   flex: 1;
 
   a {
     display: flex;
     align-items: center;
-    gap: 0.65rem;
-    padding: 0.55rem 0.75rem;
-    border-radius: var(--radius-sm);
-    border-left: 3px solid transparent;
-    color: var(--on-navy);
+    gap: 0.75rem;
+    padding: 0.6rem 0.9rem;
+    color: var(--on-navy-muted);
+    font-family: var(--font-display);
+    font-size: 1.08rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
     text-decoration: none;
-    font-weight: 500;
+    clip-path: var(--parallelogram);
+    transition:
+      background 0.15s,
+      color 0.15s;
 
     &:hover {
-      background: rgb(255 255 255 / 7%);
+      color: #fff;
+      background: var(--surface-2);
     }
     &.active {
-      background: rgb(255 255 255 / 11%);
-      border-left-color: var(--gold);
       color: #fff;
-      font-weight: 600;
+      background: linear-gradient(90deg, var(--primary), #1d4fd8);
+
+      app-icon {
+        color: var(--amber);
+      }
     }
   }
 }
 
-.icon {
-  width: 1.25rem;
-  text-align: center;
-}
-
 .nav-title {
-  margin: 1rem 0 0.35rem;
-  padding: 0 0.75rem;
-  font-family: var(--font-display);
-  font-size: 0.8rem;
+  margin: 1rem 0 0.4rem;
+  padding-left: 0.9rem;
+  font-size: 0.64rem;
   font-weight: 700;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: var(--on-navy-muted);
+  color: #4f6385;
 }
 
-.account {
+.credential {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  border-top: 1px solid rgb(255 255 255 / 12%);
-  padding-top: 1rem;
+  gap: 0.6rem;
+  padding: 0.85rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--amber);
+  clip-path: var(--chamfer);
 }
 
 .who {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  padding: 0.4rem;
-  border-radius: var(--radius-sm);
+  gap: 0.65rem;
   color: #fff;
   text-decoration: none;
 
-  &:hover,
-  &.active {
-    background: rgb(255 255 255 / 8%);
+  &:hover strong,
+  &.active strong {
+    color: var(--amber);
   }
 }
 
@@ -142,30 +143,68 @@ nav {
 }
 
 .role {
-  font-size: 0.75rem;
-  color: var(--on-navy-muted);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
 }
 
 .avatar {
   display: grid;
   place-items: center;
   flex: none;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: var(--navy-700);
-  border: 2px solid var(--gold);
+  width: 40px;
+  height: 40px;
+  background: var(--primary);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 800;
+  clip-path: var(--parallelogram);
+}
+
+.access {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  color: var(--success);
+
+  &.warn {
+    color: var(--warning);
+  }
+}
+
+.access-days {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 800;
+  font-style: italic;
+  line-height: 1;
+}
+
+.access-label {
+  font-size: 0.7rem;
   font-weight: 700;
-  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
 }
 
 .logout {
-  background: transparent;
-  border-color: rgb(255 255 255 / 20%);
-  color: var(--on-navy);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 0.82rem;
+  cursor: pointer;
 
-  &:hover:not(:disabled) {
-    background: rgb(255 255 255 / 8%);
+  &:hover {
+    color: var(--danger);
   }
 }
 
@@ -174,22 +213,20 @@ nav {
 }
 
 .content {
-  max-width: 1200px;
+  max-width: 1240px;
   margin: 0 auto;
-  padding: 1.75rem 1.5rem 3rem;
+  padding: 2rem 2rem 3.5rem;
 }
 
-.expiring {
-  margin: 1rem 1.5rem 0;
-}
-
-.demo-banner {
+.notice {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
-  margin: 1rem 1.5rem 0;
+  max-width: 1176px;
+  margin: 1.25rem auto 0;
+  width: calc(100% - 4rem);
 }
 
 .topbar,
@@ -206,7 +243,8 @@ nav {
     position: fixed;
     inset: 0 auto 0 0;
     z-index: 50;
-    width: min(280px, 85vw);
+    width: min(290px, 86vw);
+    background: var(--navy-900);
     transform: translateX(-100%);
     transition: transform 0.2s ease;
   }
@@ -220,34 +258,44 @@ nav {
     position: fixed;
     inset: 0;
     z-index: 40;
-    background: rgb(0 0 0 / 45%);
+    background: rgb(0 0 0 / 60%);
   }
 
   .topbar {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.6rem;
     position: sticky;
     top: 0;
     z-index: 30;
-    padding: 0.5rem 1rem;
-    background: var(--navy-800);
-    color: #fff;
-    border-bottom: 3px solid var(--flag-yellow);
+    padding: 0.55rem 1rem;
+    background: rgb(2 6 13 / 94%);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 3px 0 -1px var(--amber);
+  }
 
-    .menu-btn {
-      color: #fff;
-    }
+  .menu-btn {
+    display: inline-flex;
+    padding: 0.3rem;
+    border: 0;
+    background: none;
+    color: #fff;
+    cursor: pointer;
   }
 
   .brand-mobile {
     font-family: var(--font-display);
-    font-size: 1.3rem;
-    font-weight: 700;
-    letter-spacing: 0.04em;
+    font-size: 1.45rem;
+    font-weight: 800;
+    font-style: italic;
+    text-transform: uppercase;
   }
 
   .content {
-    padding: 1.25rem 1rem 2.5rem;
+    padding: 1.4rem 1rem 2.5rem;
+  }
+
+  .notice {
+    width: calc(100% - 2rem);
   }
 }

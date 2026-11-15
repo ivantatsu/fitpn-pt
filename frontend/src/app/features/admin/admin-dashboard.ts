@@ -12,7 +12,7 @@ import { RenewButton } from './renew-button';
   template: `
     <div class="page-header">
       <div>
-        <h1>Panel de administración</h1>
+        <h1>Centro de mando</h1>
         <p class="muted">Estado de los alumnos y su actividad.</p>
       </div>
       <a class="btn btn-primary" routerLink="usuarios/nuevo">+ Nuevo usuario</a>
